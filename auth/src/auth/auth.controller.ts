@@ -1,54 +1,63 @@
-// Nest
-import { Body, ClassSerializerInterceptor, Controller, Get, Post, Request, UseGuards, UseInterceptors } from '@nestjs/common';
+// NestJS
+import { Body, Controller, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
 
-// YJ
+// Common
 import { CurrentUser, CurrentUserId, JwtRefreshTokenAuthGuard, Public } from '@yj-major-project/common';
 
 // Other Dependencies
-import { ObjectID } from 'typeorm';
+import { ObjectId } from 'mongoose';
 
 // Custom
-// Services
-import { AuthService } from './auth.service';
 // DTOs
-import { SignupAuthDto } from './dto/signup-auth.dto';
+import { SignupAuthDto } from './dto/signup.dto';
+import { TokensDto } from './dto/tokens.dto';
 // Guards
 import { LocalAuthGuard } from './guards/local-auth.guard';
+// Schemas
+import { User } from '../../src/users/schemas/user.schema';
+// Services
+import { AuthService } from './auth.service';
+import { AccessTokenDto } from './dto/access-token.dto';
 
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) { }
 
   @Public()
   @Post('signup')
-  async signup(@Body() signupAuthDto: SignupAuthDto) {
+  async signup(@Body() signupAuthDto: SignupAuthDto): Promise<TokensDto> {
     return await this.authService.signup(signupAuthDto);
   }
 
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('signin')
-  async signin(@Request() req) {
+  async signin(@Request() req): Promise<TokensDto> {
     return await this.authService.signin(req.user);
   }
 
   @Get('current-user')
-  currentUser(@CurrentUserId() userId: ObjectID) {
-    return this.authService.currentUser(userId);
+  async currentUser(@Request() req): Promise<User> {
+    return await this.authService.getCurrentUser(req.user.id);
   }
 
   @Post('signout')
-  async signout(@CurrentUserId() userId: ObjectID, @Request() req) {
-    await this.authService.signout(userId);
+  async signout(@CurrentUserId() id: ObjectId, @Request() req) {
+    await this.authService.signout(id);
     req.logout();
   }
 
   @Public()
   @UseGuards(JwtRefreshTokenAuthGuard)
-  @Post('refresh-token')
-  async refreshTokens(@CurrentUserId() userId: ObjectID, @CurrentUser('refreshToken') refreshToken: string) {
-    return await this.authService.refreshToken(userId, refreshToken);
+  @Post('refresh-access-token')
+  async refreshAccessToken(@CurrentUserId() id: ObjectId, @CurrentUser('refreshToken') refreshToken: string): Promise<AccessTokenDto> {
+    return await this.authService.refreshAccessToken(id, refreshToken);
+  }
+
+  @Public()
+  @Post('verify-token/:token')
+  async verifyToken(@Param('token') token: string): Promise<any> {
+    return await this.authService.verifyToken(token);
   }
 }

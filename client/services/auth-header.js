@@ -3,12 +3,12 @@ import Cookies from 'js-cookie';
 
 
 const getAuthHeader = (token) => {
-  const tokens = Cookies.get('tokens');
-  if (tokens) {
-    return { Authorization: 'Bearer ' + JSON.parse(tokens)[token] };
+  const tokenValue = Cookies.get(token);
+  if (tokenValue) {
+    return { Authorization: 'Bearer ' + tokenValue };
   } else {
     return null;
   }
-}
+};
 
 export default getAuthHeader;

@@ -6,6 +6,8 @@ export const addStateAttribute = (setState, attribute, message) => {
 };
 
 export const deleteStateAttribute = (state, setState, attribute) => {
-  const { [attribute]: value, ...rest } = state;
-  setState(rest);
+  if (attribute in state) {
+    const { [attribute]: value, ...rest } = state;
+    setState(rest);
+  }
 };

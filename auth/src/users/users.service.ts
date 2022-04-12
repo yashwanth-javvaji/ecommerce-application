@@ -1,64 +1,70 @@
-// Nest
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+// NestJS
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { InjectModel } from '@nestjs/mongoose';
+
+// Common
+import { Role } from '@yj-major-project/common';
 
 // Other Dependencies
-import { ObjectID, Repository } from 'typeorm';
+import { Model, ObjectId } from 'mongoose';
 
 // Custom
 // DTOs
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-// Entities
-import { User } from './entities/user.entity';
+// Schemas
+import { User, UserDocument } from './schemas/user.schema';
 
 
 @Injectable()
-export class UsersService {
+export class UsersService implements OnModuleInit {
   constructor(
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    @Inject('USERS_SERVICE') private readonly client: ClientProxy
   ) { }
 
+  async onModuleInit() {
+    const createdAdmin = new this.userModel({
+      "firstname": "Super",
+      "lastname": "Admin",
+      "email": "admin@major-project.com",
+      "password": "password",
+      "roles": [Role.Admin]
+    });
+    this.client.emit('createUser', createdAdmin);
+    createdAdmin.save();
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
-    return await this.usersRepository.save(new User(createUserDto));
+    const createdUser = new this.userModel(createUserDto);
+    this.client.emit('createUser', createdUser);
+    return createdUser.save();
   }
 
   async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
+    return await this.userModel.find().exec();
   }
 
-  async findOneById(id: ObjectID): Promise<User | undefined> {
-    return await this.usersRepository.findOne(id);
+  async findById(id: ObjectId): Promise<User | undefined> {
+    return await this.userModel.findById(id).exec();
   }
 
   async findOneByEmail(email: string): Promise<User | undefined> {
-    return await this.usersRepository.findOne({
-      where: {
-        email
-      }
-    });
+    return await this.userModel.findOne({ email }).exec();
   }
 
-  async update(id: ObjectID, updateUserDto: Partial<UpdateUserDto>) {
-    const user = await this.usersRepository.findOne(id);
-    if (!user) {
-      throw new NotFoundException();
+  async update(id: ObjectId, updateUserDto: Partial<UpdateUserDto>): Promise<User | undefined> {
+    const updatedUser = await this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
+    if (!!updatedUser) {
+      this.client.emit('updateUser', updatedUser);
+      return updatedUser;
     }
-    user.firstname = updateUserDto.firstname || user.firstname;
-    user.lastname = updateUserDto.lastname || user.lastname;
-    user.password = updateUserDto.password || user.password;
-    if ('currentHashedRefreshToken' in updateUserDto) {
-      user.currentHashedRefreshToken = updateUserDto.currentHashedRefreshToken;
-    }
-    return await this.usersRepository.save(user);
   }
 
-  async remove(id: ObjectID) {
-    const exists = await this.usersRepository.findOne(id);
-    if (!exists) {
-      throw new NotFoundException();
-    }
-    return this.usersRepository.delete({ id });
+  async remove(id: ObjectId) {
+    await this.userModel.findByIdAndRemove(id);
+    this.client.emit('removeUser', id);
+    return;
   }
 }

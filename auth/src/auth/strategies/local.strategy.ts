@@ -1,8 +1,8 @@
-// Nest
+// NestJS
 import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 
-// Other Dependencies
+/// Other Dependencies
 import { Strategy } from "passport-local";
 
 // Custom

@@ -5,6 +5,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
 spec:
   rules:
     - host: major-project.com
@@ -17,7 +18,7 @@ spec:
                 name: auth-srv
                 port:
                   number: 3000
-          - path: /api/products/?(.*)
+          - path: /api/(categories|products|reviews)/?(.*)
             pathType: Prefix
             backend:
               service:

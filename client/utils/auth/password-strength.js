@@ -6,15 +6,15 @@ export const specialCharacters = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '
 
 const hasNumber = (value) => {
   return new RegExp(/[0-9]/).test(value);
-}
+};
 
 const hasMixedCase = (value) => {
   return new RegExp(/[a-z]/).test(value) && new RegExp(/[A-Z]/).test(value);
-}
+};
 
 const hasSpecialCharacter = (value) => {
   return new RegExp(/[~!@#$%^&*()-_=+\\/'?:,{}[\].]/).test(value);
-}
+};
 
 const getLabelAndColor = (score) => {
   switch (score) {
@@ -31,7 +31,7 @@ const getLabelAndColor = (score) => {
     default:
       return ['Weak', '#f44336'];
   }
-}
+};
 
 export const validateStrength = (password) => {
   const result = zxcvbn(password);
@@ -49,4 +49,4 @@ export const validateStrength = (password) => {
     },
     warning: result.feedback.warning
   };
-}
+};

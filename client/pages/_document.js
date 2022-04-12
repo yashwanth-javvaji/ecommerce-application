@@ -2,10 +2,8 @@
 // React
 import React from 'react';
 
-// Next
-import Document, {
-  Html, Head, Main, NextScript,
-} from 'next/document';
+// NextJS
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 // Material UI
 // Styles

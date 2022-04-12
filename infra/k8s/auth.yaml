@@ -18,11 +18,36 @@ spec:
           env:
             - name: MONGO_URI
               value: 'mongodb://auth-mongo-srv:27017/users'
-            - name: JWT_KEY
+            - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: jwt-secret
-                  key: JWT_KEY
+                  key: JWT_SECRET
+            - name: JWT_EXPIRATION_TIME
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-expiration-time
+                  key: JWT_EXPIRATION_TIME
+            - name: JWT_ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-access-token-secret
+                  key: JWT_ACCESS_TOKEN_SECRET
+            - name: JWT_ACCESS_TOKEN_EXPIRATION_TIME
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-access-token-expiration-time
+                  key: JWT_ACCESS_TOKEN_EXPIRATION_TIME
+            - name: JWT_REFRESH_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-refresh-token-secret
+                  key: JWT_REFRESH_TOKEN_SECRET
+            - name: JWT_REFRESH_TOKEN_EXPIRATION_TIME
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-refresh-token-expiration-time
+                  key: JWT_REFRESH_TOKEN_EXPIRATION_TIME
 
 ---
 

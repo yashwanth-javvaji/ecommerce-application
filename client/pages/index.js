@@ -1,65 +1,119 @@
 // React
-import { useState, useEffect } from 'react';
-
-// Next
-import Router from 'next/router';
+import { useEffect, useState } from 'react';
 
 // Material UI
 // Components
-import { Link } from "@mui/material";
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+// Icons
+import CategoryIcon from '@mui/icons-material/Category';
+import DiscountIcon from '@mui/icons-material/Discount';
+import FiberNewIcon from '@mui/icons-material/FiberNew';
+import StarIcon from '@mui/icons-material/Star';
 
 // Custom
+// Components
+import ComponentHeader from '../components/ComponentHeader';
+import Product from "../components/products/Product"
 // Services
-import { getCurrentUser, signout } from "../services/auth";
+import { getAllCategories } from '../services/categories';
+import { getAllProducts } from "../services/products";
 
 
 const Home = () => {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  const topRated = products.sort((prev, curr) => curr.rating - prev.rating).slice(0, 9);
+  const latestArrivals = products.sort((prev, curr) => prev.createdAt < curr.createdAt ? 1 : -1).slice(0, 9);
+  const bigDiscounts = products.sort((prev, curr) => curr.discount - prev.discount).slice(0, 9);
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      setIsLoading(true);
-      setHasError(false);
-      try {
-        setCurrentUser(await getCurrentUser())
-      } catch (error) {
-        setHasError(true);
-      }
-      setIsLoading(false);
-    };
-    fetchCurrentUser();
-  }, [setCurrentUser]);
+    setIsLoading(true);
+    getAllProducts()
+      .then((products) => setProducts(products))
+      .catch((err) => setHasError(true))
+      .finally(() => setIsLoading(false));
+    getAllCategories()
+      .then((categories) => setCategories(categories.map((category) => category.name)));
+  }, []);
 
+  if (hasError) {
+    return <p>Something went wrong</p>
+  }
+  if (isLoading) {
+    return <p>Loading...</p>
+  }
   return (
-    <>
-      {hasError && <p>Something went wrong.</p>}
-      {isLoading ? (
-        <p>Loading ...</p>
-      ) : (currentUser ? (
-        <>
-          <div>Hello {currentUser.firstname} {currentUser.lastname}</div>
-          <Link href="#" variant="body2" onClick={() => signout({
-            onSuccess: () => Router.reload()
-          })}>
-            Sign out
-          </Link>
-        </>
-      ) : (
-        <>
-          <Link href="/signup" variant="body2">
-            Sign up
-          </Link>
-          <br></br>
-          <Link href="/signin" variant="body2">
-            Sign in
-          </Link>
-        </>
-      )
-      )}
-    </>
-  )
-}
+    <Grid container spacing={9}>
+      <Grid item xs={12}>
+        <ComponentHeader
+          icon={StarIcon}
+          title="Top Rated"
+          href="/products?sortBy=Rating"
+          linkText="View All"
+          variant="text"
+        />
+        <Grid container spacing={3}>
+          {topRated.map((product) => (
+            <Grid key={product.id} item xs={4}>
+              <Product product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <ComponentHeader
+          icon={FiberNewIcon}
+          title="Latest Arrivals"
+          href="/products?sortBy=Latest"
+          linkText="View All"
+          variant="text"
+        />
+        <Grid container spacing={3}>
+          {latestArrivals.map((product) => (
+            <Grid key={product.id} item xs={4}>
+              <Product product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <ComponentHeader
+          icon={DiscountIcon}
+          title="Big Discounts"
+          href="/products?sortBy=Discount"
+          linkText="View All"
+          variant="text"
+        />
+        <Grid container spacing={3}>
+          {bigDiscounts.map((product) => (
+            <Grid key={product.id} item xs={4}>
+              <Product product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <ComponentHeader
+          icon={CategoryIcon}
+          title="Categories"
+          href="/products"
+          linkText="View All"
+          variant="text"
+        />
+        <Grid container spacing={3}>
+          {categories.map((category) => (
+            <Grid key={category} item xs="auto">
+              <Button variant="outlined" href={`/products?category=${category}`} sx={{ fontWeight: 600 }}>{category}</Button>
+            </Grid>
+          ))}
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+};
 
 export default Home;
