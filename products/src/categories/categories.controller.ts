@@ -1,4 +1,4 @@
-// Nest
+// NestJS
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 
 // Common
@@ -15,7 +15,6 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './schemas/category.schema';
 // Services
 import { CategoriesService } from './categories.service';
-import mongoose from 'mongoose';
 
 
 @Controller('categories')
@@ -37,14 +36,14 @@ export class CategoriesController {
 
   @Public()
   @Get(':id')
-  async findOneById(@Param('id') id: ObjectId): Promise<Category> {
+  async findById(@Param('id') id: ObjectId): Promise<Category> {
     return await this.categoriesService.findById(id);
   }
 
   @Public()
   @Get('name/:name')
-  async findOneByName(@Param('name') name: string): Promise<Category> {
-    return await this.categoriesService.findOneByName(name);
+  async findByName(@Param('name') name: string): Promise<Category> {
+    return await this.categoriesService.findByName(name);
   }
 
   @hasRoles(Role.Admin)

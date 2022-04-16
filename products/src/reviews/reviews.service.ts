@@ -1,17 +1,16 @@
-// Nest
-import { Injectable, NotFoundException } from '@nestjs/common';
+// NestJS
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ProductDocument } from 'src/products/schemas/product.schema';
 
 // Other Dependencies
+import { Model } from 'mongoose';
 
 // Custom
 // DTOs
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+// Schemas
 import { Review, ReviewDocument } from './schemas/review.schema';
-// Entities
-import { Model } from 'mongoose';
 
 
 @Injectable()
@@ -21,11 +20,8 @@ export class ReviewsService {
     private readonly reviewModel: Model<ReviewDocument>
   ) { }
 
-  async create(userId, createReviewDto: CreateReviewDto): Promise<Review> {
-    const createdReview = new this.reviewModel({
-      ...createReviewDto,
-      user: userId
-    });
+  async create(createReviewDto: CreateReviewDto): Promise<Review> {
+    const createdReview = new this.reviewModel(createReviewDto);
     return createdReview.save();
   }
 

@@ -115,7 +115,7 @@ const SignIn = () => {
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
-                {!!errors.message && (
+                {(!!errors.message) && (
                   <Grid item xs={12}>
                     <Alert severity="error">{errors.message}</Alert>
                   </Grid>
@@ -175,11 +175,6 @@ const SignIn = () => {
                 Sign In
               </Button>
               <Grid container justifyContent="flex-end">
-                {/* <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid> */}
                 <Grid item>
                   <Link href="/auth/signup" variant="body2">
                     Don&apos;t have an account? Sign Up
@@ -189,7 +184,7 @@ const SignIn = () => {
             </Box>
           </Box>
         </Grid>
-      </Grid >
+      </Grid>
     </>
   );
 }

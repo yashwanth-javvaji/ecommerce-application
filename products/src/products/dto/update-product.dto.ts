@@ -1,4 +1,4 @@
-// Nest
+// NestJS
 import { PartialType } from '@nestjs/mapped-types';
 
 // Other Dependencies

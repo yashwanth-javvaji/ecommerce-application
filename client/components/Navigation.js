@@ -7,6 +7,7 @@ import Router from 'next/router';
 // Material UI
 // Components
 import AppBar from '@mui/material/AppBar';
+import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -31,7 +32,9 @@ import DiscountIcon from '@mui/icons-material/Discount';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
+import InventoryIcon from '@mui/icons-material/Inventory';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -45,9 +48,10 @@ import { styled } from '@mui/material/styles';
 import { useCart } from 'react-use-cart';
 
 // Custom
-// HOC
+// HOCs
 import withCurrentUser from '../HOC/withCurrentUser';
 // Services
+import { getProfileImage } from '../services/profile';
 import { getAllCategories } from '../services/categories';
 import { signout } from '../services/auth';
 // Utils
@@ -64,6 +68,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const Navigation = ({ currentUser }) => {
+    const [profileImage, setProfileImage] = useState();
     const [categories, setCategories] = useState([]);
 
     // side nav
@@ -134,6 +139,15 @@ const Navigation = ({ currentUser }) => {
                 </ListItemIcon>
                 <ListItemText>Profile</ListItemText>
             </MenuItem>
+            <MenuItem onClick={() => {
+                Router.push("/orders");
+                handleMenuClose();
+            }}>
+                <ListItemIcon>
+                    <LocalShippingIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>My Orders</ListItemText>
+            </MenuItem>
             <Divider />
             <MenuItem onClick={async () => {
                 await signout({
@@ -185,6 +199,10 @@ const Navigation = ({ currentUser }) => {
     );
 
     useEffect(() => {
+        if (!!currentUser) {
+            getProfileImage(currentUser.profileImage)
+                .then((profileImage) => setProfileImage(profileImage));
+        }
         validateCartItems(items, removeItem);
         getAllCategories()
             .then((categories) => setCategories(categories.map((category) => category.name)));
@@ -205,10 +223,12 @@ const Navigation = ({ currentUser }) => {
                     <Typography
                         variant="h6"
                         noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' }, ml: 2 }}
+                        component="a"
+                        href="/"
+                        color="inherit"
+                        sx={{ textDecoration: 'none', display: { xs: 'none', sm: 'block' }, ml: 2 }}
                     >
-                        E-Commerce Application
+                        SKY E-Commerce
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -216,12 +236,12 @@ const Navigation = ({ currentUser }) => {
                             variant="contained"
                             disableElevation
                             size="large"
-                            startIcon={currentUser ? <AccountCircleIcon /> : <LoginIcon />}
-                            endIcon={currentUser && <KeyboardArrowDownIcon />}
-                            onClick={currentUser ? handleProfileMenuOpen : () => Router.push("/auth/signin")}
+                            startIcon={(!!currentUser) ? <Avatar src={profileImage} sx={{ width: 36, height: 36 }} /> : <LoginIcon />}
+                            endIcon={(!!currentUser) && <KeyboardArrowDownIcon />}
+                            onClick={(!!currentUser) ? handleProfileMenuOpen : () => Router.push("/auth/signin")}
                             sx={{ textTransform: "none" }}
                         >
-                            {currentUser ? "Hello, " + currentUser.lastname : "Sign In"}
+                            {currentUser ? "Hello, " + currentUser.firstname : "Sign In"}
                         </Button>
                         <IconButton color="inherit" onClick={() => Router.push("/cart")}>
                             <Badge badgeContent={totalUniqueItems} color="error">
@@ -278,7 +298,7 @@ const Navigation = ({ currentUser }) => {
                         <ListItemIcon>
                             <CategoryIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Inbox" />
+                        <ListItemText primary="Category" />
                         {categoryDropdownOpen ? <ExpandLess sx={{ ml: 1 }} /> : <ExpandMore sx={{ ml: 1 }} />}
                     </ListItemButton>
                     <Collapse in={categoryDropdownOpen} timeout="auto" unmountOnExit>
@@ -291,6 +311,34 @@ const Navigation = ({ currentUser }) => {
                         ))}
                     </Collapse>
                 </List>
+                {(!!currentUser && currentUser.roles.includes("admin")) && (
+                    <>
+                        <Divider />
+                        <List component="nav">
+                            <ListSubheader component="div" sx={{ fontSize: 16, fontWeight: 500 }}>
+                                Admin
+                            </ListSubheader>
+                            <ListItemButton component="a" href="/admin/categories">
+                                <ListItemIcon>
+                                    <CategoryIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Categories" />
+                            </ListItemButton>
+                            <ListItemButton component="a" href="/admin/products">
+                                <ListItemIcon>
+                                    <InventoryIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Products" />
+                            </ListItemButton>
+                            <ListItemButton component="a" href="/admin/orders">
+                                <ListItemIcon>
+                                    <LocalShippingIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Orders" />
+                            </ListItemButton>
+                        </List>
+                    </>
+                )}
             </Drawer>
             {renderMobileMoreMenu}
             {renderProfileMenu}

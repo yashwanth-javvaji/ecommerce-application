@@ -2,6 +2,7 @@
 import { useState } from "react";
 
 // Next
+import Head from 'next/head';
 import Router from 'next/router';
 
 // Material UI
@@ -9,7 +10,6 @@ import Router from 'next/router';
 import Alert from '@mui/material/Alert';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
@@ -19,12 +19,12 @@ import CategoryIcon from '@mui/icons-material/Category';
 // Custom
 // Components
 import ComponentHeader from "../../../components/ComponentHeader";
-// HOC
+// HOCs
 import isAdmin from "../../../HOC/isAdmin";
 // Services
 import { createCategory } from "../../../services/categories";
 // Utils
-import { checkIsEmpty } from "../../../utils/error-handling/validation";
+import { checkIsEmpty, checkLength } from "../../../utils/error-handling/validation";
 import { formatErrorMessage } from '../../../utils/error-handling/format-error-message';
 
 
@@ -40,10 +40,10 @@ const AddCategory = () => {
         // name
         if (attributes.includes("name")) {
             const value = target ? target.value : formData.name;
-            isError |= checkIsEmpty(value, "name", errors, setErrors);
+            isError |= checkIsEmpty(value, "name", errors, setErrors) || checkLength(value, { min: 3 }, "name", errors, setErrors);
         }
         return isError;
-    }
+    };
 
     const handleBlur = (event) => {
         validate(event.target);
@@ -70,8 +70,11 @@ const AddCategory = () => {
     };
 
     return (
-        <Container>
-            <Grid container spacing={3}>
+        <>
+            <Head>
+                <title>SKY | Admin - Add Category</title>
+            </Head>
+            <Grid container spacing={2}>
                 <ComponentHeader
                     icon={CategoryIcon}
                     title="Add Category"
@@ -82,7 +85,7 @@ const AddCategory = () => {
                     <Paper sx={{ p: 3 }}>
                         <Box component="form" id="addCategoryForm" noValidate onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
-                                {!!errors.message && (
+                                {(!!errors.message) && (
                                     <Grid item xs={12}>
                                         <Alert severity="error">{errors.message}</Alert>
                                     </Grid>
@@ -115,7 +118,7 @@ const AddCategory = () => {
                     </Paper>
                 </Grid>
             </Grid>
-        </Container>
+        </>
     );
 };
 

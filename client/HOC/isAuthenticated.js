@@ -12,10 +12,10 @@ import Typography from '@mui/material/Typography';
 import Cookies from 'js-cookie';
 
 // Custom
-// Utils
-import { verifyTokens } from '../utils/auth/verify-tokens';
 // Services
 import { getCurrentUser } from "../services/auth";
+// Utils
+import { verifyTokens } from '../utils/auth/verify-tokens';
 
 
 const isAuthenticated = (WrappedComponent) => {

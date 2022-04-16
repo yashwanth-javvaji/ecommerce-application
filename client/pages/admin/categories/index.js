@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 
 // Next
+import Head from 'next/head';
 import Link from "next/link";
 import Router from 'next/router';
 
@@ -19,7 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 // Custom
 // Components
 import ComponentHeader from "../../../components/ComponentHeader";
-// HOC
+// HOCs
 import isAdmin from "../../../HOC/isAdmin";
 // Services
 import { deleteCategory, getAllCategories } from '../../../services/categories';
@@ -73,7 +74,11 @@ const CategoriesDashboard = () => {
         return <p>Loading...</p>
     }
     return (
-        <Grid container spacing={3}>
+        <>
+        <Head>
+        <title>SKY | Admin - Categories</title>
+      </Head>
+        <Grid container spacing={2}>
             <ComponentHeader
                 icon={CategoryIcon}
                 title="Categories"
@@ -92,6 +97,7 @@ const CategoriesDashboard = () => {
                 />
             </Grid>
         </Grid>
+        </>
     );
 };
 

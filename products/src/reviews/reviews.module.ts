@@ -1,15 +1,16 @@
-// Nest
+// NestJS
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UsersModule } from 'src/users/users.module';
 
 // Custom
 // Controllers
 import { ReviewsController } from './reviews.controller';
-// Entities
+// Modules
+import { UsersModule } from '../users/users.module';
+// Schemas
+import { Review, ReviewSchema } from './schemas/review.schema';
 // Services
 import { ReviewsService } from './reviews.service';
-import { Review, ReviewSchema } from './schemas/review.schema';
 
 
 @Module({

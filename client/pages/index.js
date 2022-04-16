@@ -1,6 +1,9 @@
 // React
 import { useEffect, useState } from 'react';
 
+// NextJS
+import Head from 'next/head';
+
 // Material UI
 // Components
 import Button from '@mui/material/Button';
@@ -47,72 +50,77 @@ const Home = () => {
     return <p>Loading...</p>
   }
   return (
-    <Grid container spacing={9}>
-      <Grid item xs={12}>
-        <ComponentHeader
-          icon={StarIcon}
-          title="Top Rated"
-          href="/products?sortBy=Rating"
-          linkText="View All"
-          variant="text"
-        />
-        <Grid container spacing={3}>
-          {topRated.map((product) => (
-            <Grid key={product.id} item xs={4}>
-              <Product product={product} />
-            </Grid>
-          ))}
+    <>
+      <Head>
+        <title>SKY | Home</title>
+      </Head>
+      <Grid container spacing={9}>
+        <Grid item xs={12}>
+          <ComponentHeader
+            icon={StarIcon}
+            title="Top Rated"
+            href="/products?sortBy=Rating"
+            linkText="View All"
+            variant="text"
+          />
+          <Grid container spacing={3}>
+            {topRated.map((product) => (
+              <Grid key={product.id} item xs={4}>
+                <Product product={product} />
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <ComponentHeader
+            icon={FiberNewIcon}
+            title="Latest Arrivals"
+            href="/products?sortBy=Latest"
+            linkText="View All"
+            variant="text"
+          />
+          <Grid container spacing={3}>
+            {latestArrivals.map((product) => (
+              <Grid key={product.id} item xs={4}>
+                <Product product={product} />
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <ComponentHeader
+            icon={DiscountIcon}
+            title="Big Discounts"
+            href="/products?sortBy=Discount"
+            linkText="View All"
+            variant="text"
+          />
+          <Grid container spacing={3}>
+            {bigDiscounts.map((product) => (
+              <Grid key={product.id} item xs={4}>
+                <Product product={product} />
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <ComponentHeader
+            icon={CategoryIcon}
+            title="Categories"
+            href="/products"
+            linkText="View All"
+            variant="text"
+          />
+          <Grid container spacing={3}>
+            {categories.map((category) => (
+              <Grid key={category} item xs="auto">
+                <Button variant="outlined" href={`/products?category=${category}`} sx={{ fontWeight: 600 }}>{category}</Button>
+              </Grid>
+            ))}
+          </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <ComponentHeader
-          icon={FiberNewIcon}
-          title="Latest Arrivals"
-          href="/products?sortBy=Latest"
-          linkText="View All"
-          variant="text"
-        />
-        <Grid container spacing={3}>
-          {latestArrivals.map((product) => (
-            <Grid key={product.id} item xs={4}>
-              <Product product={product} />
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <ComponentHeader
-          icon={DiscountIcon}
-          title="Big Discounts"
-          href="/products?sortBy=Discount"
-          linkText="View All"
-          variant="text"
-        />
-        <Grid container spacing={3}>
-          {bigDiscounts.map((product) => (
-            <Grid key={product.id} item xs={4}>
-              <Product product={product} />
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <ComponentHeader
-          icon={CategoryIcon}
-          title="Categories"
-          href="/products"
-          linkText="View All"
-          variant="text"
-        />
-        <Grid container spacing={3}>
-          {categories.map((category) => (
-            <Grid key={category} item xs="auto">
-              <Button variant="outlined" href={`/products?category=${category}`} sx={{ fontWeight: 600 }}>{category}</Button>
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
-    </Grid>
+    </>
   );
 };
 

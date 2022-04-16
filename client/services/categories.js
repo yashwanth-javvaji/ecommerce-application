@@ -5,6 +5,7 @@ import axios from 'axios';
 // Services
 import getAuthHeader from './auth-header';
 
+
 // constants
 const API_BASE_URL = '/api/categories/';
 

@@ -1,13 +1,18 @@
+// NestJS
 import { Module, ValidationPipe } from '@nestjs/common';
-import { CategoriesModule } from './categories/categories.module';
 import { APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { MongooseModule } from '@nestjs/mongoose';
+
+// Common
+import { JwtAccessTokenAuthGuard, JwtAccessTokenStrategy, JwtRefreshTokenStrategy, RolesGuard } from '@yj-major-project/common';
+
+// Custom
+// Modules
+import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
-// YJ
-import { JwtAccessTokenAuthGuard, RolesGuard } from '@yj-major-project/common';
-import { JwtAccessTokenStrategy, JwtRefreshTokenStrategy } from '@yj-major-project/common';
 import { ReviewsModule } from './reviews/reviews.module';
 import { UsersModule } from './users/users.module';
-import { MongooseModule } from '@nestjs/mongoose';
+
 
 @Module({
   imports: [
@@ -15,7 +20,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     CategoriesModule,
     ProductsModule,
     UsersModule,
-    ReviewsModule,
+    ReviewsModule
   ],
   providers: [
     JwtAccessTokenStrategy,

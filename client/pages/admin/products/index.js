@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 
 // Next
+import Head from 'next/head';
 import Link from "next/link";
 import Router from 'next/router';
 
@@ -19,7 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 // Custom
 // Components
 import ComponentHeader from "../../../components/ComponentHeader";
-// HOC
+// HOCs
 import isAdmin from "../../../HOC/isAdmin";
 // Services
 import { deleteProduct, getAllProducts } from "../../../services/products";
@@ -82,25 +83,30 @@ const ProductsDashboard = () => {
         return <p>Loading...</p>
     }
     return (
-        <Grid container spacing={3}>
-            <ComponentHeader
-                icon={CategoryIcon}
-                title="Products"
-                href="/admin/products/add"
-                linkText="Add Product"
-            />
-            <Grid item xs={12}>
-                <DataGrid
-                    rows={products}
-                    columns={columns}
-                    pageSize={pageSize}
-                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                    rowsPerPageOptions={[5, 10, 20]}
-                    autoHeight
-                    disableSelectionOnClick
+        <>
+            <Head>
+                <title>SKY | Admin - Products</title>
+            </Head>
+            <Grid container spacing={2}>
+                <ComponentHeader
+                    icon={CategoryIcon}
+                    title="Products"
+                    href="/admin/products/add"
+                    linkText="Add Product"
                 />
+                <Grid item xs={12}>
+                    <DataGrid
+                        rows={products}
+                        columns={columns}
+                        pageSize={pageSize}
+                        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                        rowsPerPageOptions={[5, 10, 20]}
+                        autoHeight
+                        disableSelectionOnClick
+                    />
+                </Grid>
             </Grid>
-        </Grid>
+        </>
     );
 };
 

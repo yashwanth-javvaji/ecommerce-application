@@ -29,7 +29,7 @@ import PasswordStrength from '../../components/auth/PasswordStrength';
 // Services
 import { signup } from '../../services/auth';
 // Utils
-import { checkIsEmail, checkPassword, checkIsEmpty } from "../../utils/error-handling/validation";
+import { checkIsEmail, checkPassword, checkIsEmpty, checkLength } from "../../utils/error-handling/validation";
 import { formatErrorMessage } from '../../utils/error-handling/format-error-message';
 import { validateStrength } from '../../utils/auth/password-strength';
 
@@ -64,12 +64,12 @@ const SignUp = () => {
     // firstname
     if (attributes.includes("firstname")) {
       const value = target ? target.value : formData.firstname;
-      isError |= checkIsEmpty(value, "firstname", errors, setErrors);
+      isError |= checkIsEmpty(value, "firstname", errors, setErrors) || checkLength(value, { min: 3 }, "firstname", errors, setErrors);
     }
-    //lastname
+    // lastname
     if (attributes.includes("lastname")) {
       const value = target ? target.value : formData.lastname;
-      isError |= checkIsEmpty(value, "lastname", errors, setErrors);
+      isError |= checkIsEmpty(value, "lastname", errors, setErrors) || checkLength(value, { min: 3 }, "lastname", errors, setErrors);
     }
     // email
     if (attributes.includes("email")) {
@@ -79,7 +79,7 @@ const SignUp = () => {
     // password
     if (attributes.includes("password")) {
       const value = target ? target.value : formData.password;
-      isError |= checkPassword(value, formData.confirmPassword, "password", errors, setErrors);
+      isError |= checkPassword(value, formData.confirmPassword, "password", errors, setErrors) || checkLength(value, { min: 8 }, "password", errors, setErrors);
     }
     // confirmPassword
     if (attributes.includes("confirmPassword")) {
@@ -153,7 +153,7 @@ const SignUp = () => {
             </Typography>
             <Box component="form" id="signupForm" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
-                {!!errors.message && (
+                {(!!errors.message) && (
                   <Grid item xs={12}>
                     <Alert severity="error">{errors.message}</Alert>
                   </Grid>

@@ -1,6 +1,7 @@
 // Other Dependencies
-import { IsMongoId, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsNumber, IsString, MinLength } from "class-validator";
 import { ObjectId } from 'mongoose';
+
 
 export class CreateReviewDto {
     @IsNotEmpty()
@@ -9,9 +10,10 @@ export class CreateReviewDto {
 
     @IsNotEmpty()
     @IsString()
+    @MinLength(20)
     comment: string;
 
-    // @IsNotEmpty()
-    // @IsMongoId()
-    // user: ObjectId;
+    @IsNotEmpty()
+    @IsMongoId()
+    user: ObjectId;
 }

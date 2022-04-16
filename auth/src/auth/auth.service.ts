@@ -2,21 +2,23 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
+// Common
+import { JwtPayloadDto } from '@yj-major-project/common';
+
 // Other Dependencies
 import * as bcrypt from 'bcrypt';
 import { ObjectId } from "mongoose";
 
 // Custom
 // DTOs
+import { AccessTokenDto } from './dto/access-token.dto';
 import { SigninAuthDto } from './dto/signin.dto';
 import { SignupAuthDto } from './dto/signup.dto';
 import { TokensDto } from './dto/tokens.dto';
 // Schemas
-import { User } from 'src/users/schemas/user.schema';
+import { User } from '../users/schemas/user.schema';
 // Services
 import { UsersService } from '../users/users.service';
-import { JwtPayloadDto } from '@yj-major-project/common';
-import { AccessTokenDto } from './dto/access-token.dto';
 
 
 @Injectable()

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 
 // Next
+import Head from 'next/head';
 import Router from 'next/router';
 
 // Material UI
@@ -10,7 +11,6 @@ import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
@@ -21,11 +21,11 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 // Custom
 // Components
 import ComponentHeader from "../../components/ComponentHeader";
-// HOC
+// HOCs
 import isAuthenticated from '../../HOC/isAuthenticated';
 import withCurrentUser from "../../HOC/withCurrentUser";
 // Services
-import { updateProfile, uploadProfileImage } from "../../services/profile";
+import { getProfileImage, updateProfile, uploadProfileImage } from "../../services/profile";
 // Utils
 import { checkIsEmail, checkIsEmpty } from "../../utils/error-handling/validation";
 import { formatErrorMessage } from '../../utils/error-handling/format-error-message';
@@ -97,6 +97,12 @@ const EditProfile = ({ currentUser }) => {
         }
     };
 
+    useEffect(async () => {
+        if (!!currentUser.profileImage) {
+            setProfileImageUrl(await getProfileImage(currentUser.profileImage));
+        }
+    }, [currentUser.profileImage]);
+
     useEffect(() => {
         if (!profileImage) {
             setProfileImageUrl(null);
@@ -108,7 +114,10 @@ const EditProfile = ({ currentUser }) => {
     }, [profileImage]);
 
     return (
-        <Container>
+        <>
+            <Head>
+                <title>SKY | Edit Profile</title>
+            </Head>
             <Grid container spacing={3}>
                 <ComponentHeader
                     icon={PersonIcon}
@@ -120,16 +129,16 @@ const EditProfile = ({ currentUser }) => {
                     <Paper sx={{ p: 3 }}>
                         <Box component="form" id="editProfileForm" noValidate onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
-                                {!!errors.message && (
+                                {(!!errors.message) && (
                                     <Grid item xs={12}>
                                         <Alert severity="error">{errors.message}</Alert>
                                     </Grid>
                                 )}
                                 <Grid item container spacing={2} alignItems='center'>
-                                    {(profileImageUrl || currentUser.profileImage) && (
+                                    {(!!profileImageUrl) && (
                                         <Grid item>
                                             <Avatar
-                                                src={profileImageUrl || currentUser.profileImage}
+                                                src={profileImageUrl}
                                                 sx={{ width: 56, height: 56 }}
                                             />
                                         </Grid>
@@ -204,7 +213,7 @@ const EditProfile = ({ currentUser }) => {
                     </Paper>
                 </Grid>
             </Grid>
-        </Container>
+        </>
     );
 };
 

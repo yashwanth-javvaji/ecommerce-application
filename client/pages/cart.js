@@ -1,3 +1,6 @@
+// NextJS
+import Head from 'next/head';
+
 // Material UI
 // Components
 import Box from '@mui/material/Box';
@@ -20,22 +23,25 @@ import { numberToCurrency } from "../utils/products/formatter";
 const Cart = () => {
     const { items } = useCart();
     const total = items.reduce((accumulator, item) => {
-        const { price, discount, quantity } = item;
-        return accumulator + (price * (1 - (discount / 100)) * quantity);
+        const { itemTotal, discount } = item;
+        return accumulator + (itemTotal * (1 - (discount / 100)));
     }, 0);
 
     return (
-        <Grid container spacing={3}>
-            <Grid item xs={8} container spacing={3}>
-                {items.map((item) => (
-                    <Grid key={item.id} item xs={12}>
-                        <Item item={item} />
-                    </Grid>
-                ))}
-            </Grid>
-            <Grid item xs={4}>
-                <Paper sx={{ p: 2 }}>
-                    <Box>
+        <>
+            <Head>
+                <title>SKY | Cart</title>
+            </Head>
+            <Grid container spacing={3}>
+                <Grid item xs={8} container spacing={3}>
+                    {items.map((item) => (
+                        <Grid key={item.id} item xs={12}>
+                            <Item item={item} />
+                        </Grid>
+                    ))}
+                </Grid>
+                <Grid item xs={4}>
+                    <Paper sx={{ p: 2 }}>
                         <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
                             Summary
                         </Typography>
@@ -45,7 +51,7 @@ const Cart = () => {
                             </Typography>
                         ) : (
                             items.map((item) => {
-                                const { id, name, quantity, price, discount } = item;
+                                const { id, name, quantity, itemTotal, discount } = item;
 
                                 return (
                                     <Box key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -53,30 +59,32 @@ const Cart = () => {
                                             {name} &times; {quantity}
                                         </Typography>
                                         <Typography variant="body1">
-                                            {numberToCurrency(price * (1 - (discount / 100)) * quantity, 'en-IN', 'INR')}
+                                            {numberToCurrency(itemTotal * (1 - (discount / 100)), 'en-IN', 'INR')}
                                         </Typography>
                                     </Box>
                                 );
                             })
                         )}
-                    </Box>
-                    <Divider sx={{ my: 2 }} />
-                    <Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                            <Typography variant="body1">
-                                Total
-                            </Typography>
-                            <Typography variant="body1">
-                                {numberToCurrency(total, 'en-IN', 'INR')}
-                            </Typography>
-                        </Box>
-                        <Button variant="contained" fullWidth>
-                            Checkout
-                        </Button>
-                    </Box>
-                </Paper>
+                        {(items.length !== 0) && (
+                            <>
+                                <Divider sx={{ my: 2 }} />
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                                    <Typography variant="body1">
+                                        Total
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {numberToCurrency(total, 'en-IN', 'INR')}
+                                    </Typography>
+                                </Box>
+                                <Button variant="contained" fullWidth href="/checkout">
+                                    Checkout
+                                </Button>
+                            </>
+                        )}
+                    </Paper>
+                </Grid>
             </Grid>
-        </Grid>
+        </>
     );
 };
 

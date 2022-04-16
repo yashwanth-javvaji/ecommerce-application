@@ -16,7 +16,7 @@ import { UsersModule } from './users/users.module';
   imports: [
     MongooseModule.forRoot(process.env.MONGO_URI),
     UsersModule,
-    AuthModule,
+    AuthModule
   ],
   providers: [
     JwtAccessTokenStrategy,

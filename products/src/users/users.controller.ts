@@ -1,31 +1,34 @@
-import { Controller, Get, Logger } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
-import { UsersService } from './users.service';
+// NestJS
+import { Controller, Logger } from '@nestjs/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
+
+// Other Dependencies
+import { ObjectId } from 'mongoose';
+
+// Custom
+// DTOs
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ObjectId } from 'mongoose';
-import { User } from './schemas/user.schema';
+// Services
+import { UsersService } from './users.service';
 
-@Controller('products-users')
+
+@Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
-  @MessagePattern('createUser')
+  @EventPattern('createUser')
   async create(@Payload() createUserDto: CreateUserDto) {
+    Logger.log("products create user");
     await this.usersService.create(createUserDto);
   }
 
-  @Get()
-  async findAll(): Promise<User[]> {
-    return await this.usersService.findAll();
-  }
-
-  @MessagePattern('updateUser')
+  @EventPattern('updateUser')
   async update(@Payload() updateUserDto: UpdateUserDto) {
     await this.usersService.update(updateUserDto.id, updateUserDto);
   }
 
-  @MessagePattern('removeUser')
+  @EventPattern('removeUser')
   async remove(@Payload() id: ObjectId) {
     await this.usersService.remove(id);
   }

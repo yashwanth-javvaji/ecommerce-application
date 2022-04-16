@@ -4,7 +4,7 @@ import axios from 'axios';
 // Custom
 // Services
 import getAuthHeader from './auth-header';
-import { getProfileImage } from './profile';
+
 
 // contants
 const API_BASE_URL = '/api/reviews/';
@@ -26,21 +26,18 @@ export const createReview = async ({ data, onSuccess, onError }) => {
             }
         }
     }
-}
+};
 
 // GET (Public)
 export const getAllReviews = async () => {
     try {
         const res = await axios.get(API_BASE_URL);
         const reviews = res.data;
-        for (const review of reviews) {
-            review.user.profileImage = await getProfileImage(review.user.profileImage);
-        }
         return reviews;
     } catch (err) {
         console.log(err);
     }
-}
+};
 export const getReviewById = async (id) => {
     try {
         const res = await axios.get(API_BASE_URL + id);
@@ -48,14 +45,14 @@ export const getReviewById = async (id) => {
     } catch (err) {
         console.log(err);
     }
-}
+};
 
-// PATCH (User)
-export const updateReview = () => {
+// // PATCH (User)
+// export const updateReview = () => {
 
-}
+// };
 
-// DELETE (User)
-export const deleteReview = () => {
+// // DELETE (User)
+// export const deleteReview = () => {
 
-}
+// };

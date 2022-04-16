@@ -9,15 +9,15 @@ import { ObjectId } from 'mongoose';
 
 // Custom
 // DTOs
+import { AccessTokenDto } from './dto/access-token.dto';
 import { SignupAuthDto } from './dto/signup.dto';
 import { TokensDto } from './dto/tokens.dto';
 // Guards
 import { LocalAuthGuard } from './guards/local-auth.guard';
 // Schemas
-import { User } from '../../src/users/schemas/user.schema';
+import { User } from '../users/schemas/user.schema';
 // Services
 import { AuthService } from './auth.service';
-import { AccessTokenDto } from './dto/access-token.dto';
 
 
 @Controller('auth')

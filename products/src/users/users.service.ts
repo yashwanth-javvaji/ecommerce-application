@@ -1,9 +1,16 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+// NestJS
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+
+// Other Dependencies
+import { Model, ObjectId } from 'mongoose';
+
+// Custom
+// DTOs
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+// Schemas
 import { User, UserDocument } from './schemas/user.schema';
-import { Model, ObjectId } from 'mongoose';
 
 
 @Injectable()
@@ -33,6 +40,5 @@ export class UsersService {
 
   async remove(id: ObjectId) {
     return await this.userModel.findByIdAndRemove(id);
-    return;
   }
 }

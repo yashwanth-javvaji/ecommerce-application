@@ -19,13 +19,13 @@ import RateReviewIcon from '@mui/icons-material/RateReview';
 // Custom
 // Components
 import ComponentHeader from "../ComponentHeader";
-// HOC
+// HOCs
 import withCurrentUser from '../../HOC/withCurrentUser';
 // Services
 import { addReview } from "../../services/products";
 import { createReview } from "../../services/reviews";
 // Utils
-import { checkIsEmpty } from "../../utils/error-handling/validation";
+import { checkIsEmpty, checkLength } from "../../utils/error-handling/validation";
 import { formatErrorMessage } from "../../utils/error-handling/format-error-message";
 
 
@@ -43,7 +43,7 @@ const Form = ({ currentUser, productId }) => {
         // comment
         if (attributes.includes("comment")) {
             const value = target ? target.value : formData.comment;
-            isError |= checkIsEmpty(value, "comment", errors, setErrors);
+            isError |= checkIsEmpty(value, "comment", errors, setErrors) || checkLength(value, { min: 20 }, "comment", errors, setErrors);
         }
         return isError;
     };
@@ -65,7 +65,10 @@ const Form = ({ currentUser, productId }) => {
         const isError = validate();
         if (!isError) {
             await createReview({
-                data: formData,
+                data: {
+                    ...formData,
+                    user: currentUser.id
+                },
                 onSuccess: async (review) => {
                     await addReview({
                         productId,
@@ -87,7 +90,7 @@ const Form = ({ currentUser, productId }) => {
                 />
             </Grid>
             <Grid item xs={12}>
-                {!currentUser ? (
+                {(!currentUser) ? (
                     <Typography variant="body2" color="text.secondary">Please sign-in to write a review</Typography>
                 ) : (
                     <Paper sx={{ p: 3 }}>

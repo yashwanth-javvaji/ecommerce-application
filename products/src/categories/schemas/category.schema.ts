@@ -1,5 +1,9 @@
+// NestJS
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+
+// Other Dependencies
 import { Document } from 'mongoose';
+
 
 export type CategoryDocument = Category & Document;
 

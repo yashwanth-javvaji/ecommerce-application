@@ -1,3 +1,6 @@
+// React
+import { useEffect, useState } from 'react';
+
 // NextJS
 import Image from 'next/image';
 
@@ -19,22 +22,34 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { useCart } from "react-use-cart";
 
 // Custom
+// Services
+import { getProductImage } from '../../services/products';
 // Utils
 import { numberToCurrency } from '../../utils/products/formatter';
 
 
 const Item = ({ item }) => {
     const { removeItem, updateItemQuantity } = useCart();
-    const { id, name, productImage, brand, price, quantity } = item;
+    const { id, name, brand, price, quantity } = item;
     price *= 1 - (item.discount / 100);
+
+    const [productImage, setProductImage] = useState();
+
+    useEffect(async () => {
+        if (!!item.productImage) {
+            setProductImage(await getProductImage(item.productImage));
+        }
+    }, [item.productImage]);
 
     return (
         <Card sx={{ display: 'flex' }}>
-            <Image
-                height={200}
-                width={200}
-                src={productImage}
-            />
+            {(!!productImage) && (
+                <Image
+                    height={200}
+                    width={200}
+                    src={productImage}
+                />
+            )}
             <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: "space-between" }}>
                 <CardHeader
                     action={

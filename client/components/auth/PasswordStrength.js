@@ -27,7 +27,7 @@ const PasswordStrength = ({ passwordStrength }) => {
       <Grid item xs='auto' p={1}>
         <Typography variant='overline' style={{ color, fontWeight: 700 }}>{label}</Typography>
       </Grid>
-      {!!warning && (
+      {(!!warning) && (
         <Grid item xs={12} p={1}>
           <Typography variant='body2' style={{ color: '#ff9800' }}>{warning}</Typography>
         </Grid>
@@ -37,7 +37,7 @@ const PasswordStrength = ({ passwordStrength }) => {
 
         return (
           <Grid key={key} item xs={12} px={1} py={0.75} sx={{ display: 'flex', alignItems: 'center' }}>
-            {value ? <CheckIcon sx={{ color }} /> : <CloseIcon sx={{ color }} />}
+            {(!!value) ? <CheckIcon sx={{ color }} /> : <CloseIcon sx={{ color }} />}
             <Typography variant="body2" ml={1} style={{ color, lineHeight: 1.25 }}>
               {key}
             </Typography>

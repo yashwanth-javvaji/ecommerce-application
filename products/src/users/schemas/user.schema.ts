@@ -2,7 +2,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
 // Other Dependencies
-import { ObjectId } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 
 
 export type UserDocument = User & Document;

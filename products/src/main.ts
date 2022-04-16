@@ -1,6 +1,11 @@
+// NestJS
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+
+// Custom
+// Modules
 import { AppModule } from './app.module';
+
 
 async function bootstrap() {
   // REST API
@@ -16,7 +21,7 @@ async function bootstrap() {
       queueOptions: {
         durable: false
       },
-    },
+    }
   });
   app.startAllMicroservices();
 }

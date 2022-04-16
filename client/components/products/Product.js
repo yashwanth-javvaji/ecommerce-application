@@ -1,3 +1,6 @@
+// React
+import { useEffect, useState } from 'react';
+
 // NextJS
 import Router from 'next/router';
 
@@ -21,6 +24,8 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { useCart } from "react-use-cart";
 
 // Custom
+// Services
+import { getProductImage } from '../../services/products';
 // Utils
 import { numberToCurrency } from '../../utils/products/formatter';
 
@@ -28,7 +33,15 @@ import { numberToCurrency } from '../../utils/products/formatter';
 const Product = ({ product }) => {
     const { getItem, addItem, updateItemQuantity } = useCart();
     const item = getItem(product.id);
-    const { name, productImage, brand, stock, price, discount, rating } = product;
+    const { name, brand, stock, price, discount, rating } = product;
+
+    const [productImage, setProductImage] = useState();
+
+    useEffect(async () => {
+        if (!!product.productImage) {
+            setProductImage(await getProductImage(product.productImage));
+        }
+    }, [product.productImage]);
 
     return (
         <Card>
@@ -52,7 +65,7 @@ const Product = ({ product }) => {
                     <Typography variant="h5" color="primary" sx={{ fontWeight: 600 }}>
                         {numberToCurrency(price * (1 - (discount / 100)), 'en-IN', 'INR')}
                     </Typography>
-                    {!!discount && (
+                    {(!!discount) && (
                         <Typography variant="subtitle1" color="error" sx={{ ml: 2, textDecoration: "line-through", fontWeight: 500 }}>
                             {numberToCurrency(price, 'en-IN', 'INR')}
                         </Typography>
@@ -65,7 +78,7 @@ const Product = ({ product }) => {
                 </Box>
             </CardContent>
             <CardActions>
-                {!!item ? (
+                {(!!item) ? (
                     <Button
                         variant="contained"
                         startIcon={<RemoveIcon onClick={() => updateItemQuantity(item.id, item.quantity - 1)} />}
@@ -75,7 +88,7 @@ const Product = ({ product }) => {
                         {item.quantity}
                     </Button>
                 ) : (
-                    !stock ? (
+                    (!stock) ? (
                         <Button variant="contained" color="error" sx={{ ml: 'auto', textTransform: 'none', fontWeight: 600, pointerEvents: 'none', cursor: 'not-allowed' }}>
                             Not in stock
                         </Button>

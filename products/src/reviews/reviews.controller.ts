@@ -1,17 +1,17 @@
-// Nest
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, Request } from '@nestjs/common';
-import { Public } from '@yj-major-project/common';
+// NestJS
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 
-// Other Dependencies
+// Common
+import { Public } from '@yj-major-project/common';
 
 // Custom
 // DTOs
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
-// Entities
+// Schemas
+import { Review } from './schemas/review.schema';
 // Services
 import { ReviewsService } from './reviews.service';
-import { Review } from './schemas/review.schema';
 
 
 @Controller('reviews')
@@ -19,8 +19,8 @@ export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) { }
 
   @Post()
-  async create(@Request() req, @Body() createReviewDto: CreateReviewDto): Promise<Review> {
-    return await this.reviewsService.create(req.user.id, createReviewDto);
+  async create(@Body() createReviewDto: CreateReviewDto): Promise<Review> {
+    return await this.reviewsService.create(createReviewDto);
   }
 
   @Public()
@@ -30,7 +30,7 @@ export class ReviewsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id): Promise<Review> {
+  async findById(@Param('id') id): Promise<Review> {
     return await this.reviewsService.findById(id);
   }
 

@@ -1,5 +1,5 @@
-// Nest
-import { Injectable, NotFoundException } from '@nestjs/common';
+// NestJS
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 // Other Dependencies
@@ -32,7 +32,7 @@ export class CategoriesService {
     return await this.categoryModel.findById(id).exec();
   }
 
-  async findOneByName(name: string): Promise<Category> {
+  async findByName(name: string): Promise<Category> {
     return await this.categoryModel.findOne({ name }).exec();
   }
 

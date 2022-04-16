@@ -1,14 +1,14 @@
 // NestJS
-import { Body, Controller, Delete, Get, Param, Patch, Post, Request, Response, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Response, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 // Common
 import { hasRoles, Public, Role, RolesGuard } from "@yj-major-project/common";
 
 // Other Dependencies
+import * as path from 'path';
 import { ObjectId } from 'mongoose';
 import { diskStorage } from 'multer';
-import * as path from 'path';
 import { v4 } from 'uuid';
 
 // Custom
@@ -49,13 +49,13 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOneById(@Param('id') id: ObjectId): Promise<User | undefined> {
+  async findById(@Param('id') id: ObjectId): Promise<User> {
     return await this.usersService.findById(id);
   }
 
   @UseGuards(IsCurrentUser)
   @Patch(':id')
-  async update(@Param('id') id: ObjectId, @Body() updateUserDto: UpdateUserDto): Promise<User | undefined> {
+  async update(@Param('id') id: ObjectId, @Body() updateUserDto: UpdateUserDto): Promise<User> {
     return await this.usersService.update(id, updateUserDto);
   }
 
@@ -69,7 +69,7 @@ export class UsersController {
   @UseGuards(IsCurrentUser)
   @Post(':id/upload-profile-image')
   @UseInterceptors(FileInterceptor('file', storage))
-  async uploadProfileImage(@Param('id') id: ObjectId, @UploadedFile() file, @Request() req) {
+  async uploadProfileImage(@Param('id') id: ObjectId, @UploadedFile() file) {
     return await this.usersService.update(id, { profileImage: file.filename })
   }
 

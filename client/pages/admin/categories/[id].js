@@ -3,29 +3,28 @@ import { useEffect, useState } from "react";
 
 // Next
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 // Material UI
 // Components
 import Alert from '@mui/material/Alert';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 // Icons
 import CategoryIcon from '@mui/icons-material/Category';
 
 // Custom
 // Components
 import ComponentHeader from "../../../components/ComponentHeader";
-// HOC
+// HOCs
 import isAdmin from "../../../HOC/isAdmin";
 // Services
 import { getCategoryById, updateCategory } from "../../../services/categories";
 // Utils
-import { checkIsEmpty } from "../../../utils/error-handling/validation";
+import { checkIsEmpty, checkLength } from "../../../utils/error-handling/validation";
 import { formatErrorMessage } from '../../../utils/error-handling/format-error-message';
 
 
@@ -46,10 +45,10 @@ const EditCategory = () => {
         // name
         if (attributes.includes("name")) {
             const value = target ? target.value : formData.name;
-            isError |= checkIsEmpty(value, "name", errors, setErrors);
+            isError |= checkIsEmpty(value, "name", errors, setErrors) || checkLength(value, { min: 3 }, "name", errors, setErrors);
         }
         return isError;
-    }
+    };
 
     const handleBlur = (event) => {
         validate(event.target);
@@ -92,12 +91,12 @@ const EditCategory = () => {
     if (isLoading) {
         return <p>Loading...</p>
     }
-    if (!category) {
-        return <Typography color="text.secondary">Category does not exist</Typography>
-    }
     return (
-        <Container>
-            <Grid container spacing={3}>
+        <>
+            <Head>
+                <title>SKY | Admin - Edit Category</title>
+            </Head>
+            <Grid container spacing={2}>
                 <ComponentHeader
                     icon={CategoryIcon}
                     title="Edit Category"
@@ -108,7 +107,7 @@ const EditCategory = () => {
                     <Paper sx={{ p: 3 }}>
                         <Box component="form" id="addCategoryForm" noValidate onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
-                                {!!errors.message && (
+                                {(!!errors.message) && (
                                     <Grid item xs={12}>
                                         <Alert severity="error">{errors.message}</Alert>
                                     </Grid>
@@ -141,7 +140,7 @@ const EditCategory = () => {
                     </Paper>
                 </Grid>
             </Grid>
-        </Container>
+        </>
     );
 };
 

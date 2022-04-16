@@ -26,8 +26,8 @@ export class UsersService implements OnModuleInit {
 
   async onModuleInit() {
     const createdAdmin = new this.userModel({
-      "firstname": "Super",
-      "lastname": "Admin",
+      "firstname": "Admin",
+      "lastname": "SKY E-Commerce",
       "email": "admin@major-project.com",
       "password": "password",
       "roles": [Role.Admin]
@@ -65,6 +65,5 @@ export class UsersService implements OnModuleInit {
   async remove(id: ObjectId) {
     await this.userModel.findByIdAndRemove(id);
     this.client.emit('removeUser', id);
-    return;
   }
 }

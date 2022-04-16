@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 // Next
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import Image from 'next/image';
 
 // Material UI
@@ -10,7 +11,6 @@ import Image from 'next/image';
 import Alert from '@mui/material/Alert';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Grid from "@mui/material/Grid";
@@ -19,7 +19,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Paper from "@mui/material/Paper";
 import Select from '@mui/material/Select';
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 // Icons
 import CreateIcon from '@mui/icons-material/Create';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
@@ -27,11 +26,11 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 // Custom
 // Components
 import ComponentHeader from "../../../components/ComponentHeader";
-// HOC
+// HOCs
 import isAdmin from "../../../HOC/isAdmin";
 // Services
 import { getAllCategories } from '../../../services/categories';
-import { getProductById, updateProduct, uploadProductImage } from "../../../services/products";
+import { getProductById, getProductImage, updateProduct, uploadProductImage } from "../../../services/products";
 // Utils
 import { checkFloatRange, checkIntRange, checkIsEmpty } from "../../../utils/error-handling/validation";
 import { formatErrorMessage } from '../../../utils/error-handling/format-error-message';
@@ -159,9 +158,9 @@ const EditProduct = () => {
         if (id) {
             setIsLoading(true);
             getProductById(id)
-                .then((product) => {
-                    const { productImage: productImageUrl, name, category, description, brand, stock, price, discount } = product;
-                    setProductImageUrl(productImageUrl);
+                .then(async (product) => {
+                    const { productImage, name, category, description, brand, stock, price, discount } = product;
+                    setProductImageUrl(await getProductImage(productImage));
                     setFormData({
                         ...formData,
                         name,
@@ -175,7 +174,6 @@ const EditProduct = () => {
                 })
                 .catch((err) => setHasError(true))
                 .finally(() => setIsLoading(false));
-            return () => URL.revokeObjectURL(productImageUrl);
         }
     }, [id]);
 
@@ -195,12 +193,12 @@ const EditProduct = () => {
     if (isLoading) {
         return <p>Loading...</p>
     }
-    if (!product) {
-        return <Typography color="text.secondary">Product does not exist</Typography>
-    }
     return (
-        <Container>
-            <Grid container spacing={3}>
+        <>
+            <Head>
+                <title>SKY | Admin - Edit Product</title>
+            </Head>
+            <Grid container spacing={2}>
                 <ComponentHeader
                     icon={CreateIcon}
                     title="Add Product"
@@ -211,7 +209,7 @@ const EditProduct = () => {
                     <Paper sx={{ p: 3 }}>
                         <Box component="form" id="addProductForm" noValidate onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
-                                {!!errors.message && (
+                                {(!!errors.message) && (
                                     <Grid item xs={12}>
                                         <Alert severity="error">{errors.message}</Alert>
                                     </Grid>
@@ -250,7 +248,7 @@ const EditProduct = () => {
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    {!!productImageUrl && (
+                                    {(!!productImageUrl) && (
                                         <Box>
                                             <Image
                                                 src={productImageUrl}
@@ -366,7 +364,7 @@ const EditProduct = () => {
                     </Paper>
                 </Grid>
             </Grid>
-        </Container>
+        </>
     );
 };
 

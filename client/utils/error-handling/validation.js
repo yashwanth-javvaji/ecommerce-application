@@ -1,4 +1,8 @@
+// Other Dependencies
 import validator from 'validator';
+
+// Custom
+// Utils
 import { addStateAttribute, deleteStateAttribute } from '../use-state';
 
 
@@ -67,7 +71,7 @@ export const checkIntRange = (value, options, field, errors, setErrors) => {
         updateErrorsState(isError, field, errors, setErrors, `should be less than ${options.max}`);
     }
     return isError;
-}
+};
 
 export const checkFloatRange = (value, options, field, errors, setErrors) => {
     const isError = !validator.isFloat(value, options);
@@ -77,6 +81,18 @@ export const checkFloatRange = (value, options, field, errors, setErrors) => {
         updateErrorsState(isError, field, errors, setErrors, `should be greater than ${options.min}`);
     } else if (options.hasOwnProperty("max")) {
         updateErrorsState(isError, field, errors, setErrors, `should be less than ${options.max}`);
+    }
+    return isError;
+};
+
+export const checkLength = (value, options, field, errors, setErrors) => {
+    const isError = !validator.isLength(value, options);
+    if (options.hasOwnProperty("min") && options.hasOwnProperty("max")) {
+        updateErrorsState(isError, field, errors, setErrors, `should be between ${options.min} and ${options.max} characters`);
+    } else if (options.hasOwnProperty("min")) {
+        updateErrorsState(isError, field, errors, setErrors, `should be greater than ${options.min} characters`);
+    } else if (options.hasOwnProperty("max")) {
+        updateErrorsState(isError, field, errors, setErrors, `should be less than ${options.max} characters`);
     }
     return isError;
 }

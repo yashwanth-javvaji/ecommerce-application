@@ -4,11 +4,13 @@ import Cookies from 'js-cookie';
 
 // Custom
 import getAuthHeader from './auth-header';
-import { getProfileImage } from './profile';
 
 
+// constants
 const API_BASE_URL = '/api/auth/';
 
+// POST
+// (Public)
 export const signup = async ({ data, onSuccess, onError }) => {
   try {
     const res = await axios.post(API_BASE_URL + 'signup', data);
@@ -31,7 +33,7 @@ export const signup = async ({ data, onSuccess, onError }) => {
     }
   }
 };
-
+// (Public)
 export const signin = async ({ data, onSuccess, onError }) => {
   try {
     const res = await axios.post(API_BASE_URL + 'signin', data);
@@ -54,24 +56,7 @@ export const signin = async ({ data, onSuccess, onError }) => {
     }
   }
 };
-
-export const getCurrentUser = async () => {
-  const authHeader = getAuthHeader('accessToken');
-  if (!!authHeader) {
-    try {
-      const res = await axios.get(API_BASE_URL + 'current-user', { headers: authHeader });
-      const user = res.data;
-      if (!!user.profileImage) {
-        user.profileImage = await getProfileImage(user.profileImage);
-      }
-      return user;
-    }
-    catch (err) {
-      console.log(err);
-    }
-  }
-};
-
+// (Auth)
 export const signout = async ({ onSuccess }) => {
   const authHeader = getAuthHeader('accessToken');
   if (!!authHeader) {
@@ -93,8 +78,8 @@ export const signout = async ({ onSuccess }) => {
     }
   }
 };
-
-export const refreshAccessToken = async (refreshToken) => {
+// (Auth)
+export const refreshAccessToken = async () => {
   const authHeader = getAuthHeader('refreshToken');
   if (!!authHeader) {
     try {
@@ -109,7 +94,7 @@ export const refreshAccessToken = async (refreshToken) => {
     }
   }
 };
-
+// (Public)
 export const verifyToken = async (token) => {
   try {
     return await axios.post(API_BASE_URL + 'verify-token/' + token, {});
@@ -117,6 +102,21 @@ export const verifyToken = async (token) => {
     if (err.response) {
       return err.response;
     } else {
+      console.log(err);
+    }
+  }
+};
+
+// GET (Auth)
+export const getCurrentUser = async () => {
+  const authHeader = getAuthHeader('accessToken');
+  if (!!authHeader) {
+    try {
+      const res = await axios.get(API_BASE_URL + 'current-user', { headers: authHeader });
+      const user = res.data;
+      return user;
+    }
+    catch (err) {
       console.log(err);
     }
   }

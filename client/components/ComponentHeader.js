@@ -18,7 +18,7 @@ const ComponentHeader = (props) => {
                     {props.title}
                 </Typography>
             </Grid>
-            {!!props.href && !!props.linkText && (
+            {(!!props.href && !!props.linkText) && (
                 <Grid item>
                     <Link href={props.href}>
                         <Button variant={props.variant || "contained"} sx={{ textTransform: 'none' }}>{props.linkText}</Button>

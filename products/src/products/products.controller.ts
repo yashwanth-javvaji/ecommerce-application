@@ -1,13 +1,13 @@
-// Nest
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseInterceptors, UploadedFile, Res, UseGuards, Logger } from '@nestjs/common';
+// NestJS
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Res, UseGuards } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-// YJ
+// Common
 import { hasRoles, Public, Role, RolesGuard } from "@yj-major-project/common";
 
 // Other Dependencies
-import { diskStorage } from 'multer';
 import * as path from 'path';
+import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { ObjectId } from 'mongoose';
 
@@ -15,10 +15,10 @@ import { ObjectId } from 'mongoose';
 // DTOs
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-// Entities
+// Schemas
+import { Product } from './schemas/product.schema';
 // Services
 import { ProductsService } from './products.service';
-import { Product } from './schemas/product.schema';
 
 
 export const storage = {
@@ -51,7 +51,7 @@ export class ProductsController {
 
   @Public()
   @Get(':id')
-  async findOne(@Param('id') id: ObjectId): Promise<Product> {
+  async findById(@Param('id') id: ObjectId): Promise<Product> {
     return await this.productsService.findById(id);
   }
 

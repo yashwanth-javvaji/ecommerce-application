@@ -1,18 +1,16 @@
-// Nest
-import { Injectable, NotFoundException } from '@nestjs/common';
+// NestJS
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 
 // Other Dependencies
-import { ObjectId } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
+
 // Custom
 // DTOs
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-// Entities
-// Services
-import { CategoriesService } from 'src/categories/categories.service';
-import { InjectModel } from '@nestjs/mongoose';
+// Schemas
 import { Product, ProductDocument } from './schemas/product.schema';
-import { Model } from 'mongoose';
 
 
 @Injectable()

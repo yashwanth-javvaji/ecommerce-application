@@ -1,16 +1,16 @@
-// Nest
+// NestJS
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 
 // Custom
 // Controller
 import { ProductsController } from './products.controller';
-// Entities
 // Modules
-import { CategoriesModule } from 'src/categories/categories.module';
+import { CategoriesModule } from '../categories/categories.module';
+// Schemas
+import { Product, ProductSchema } from './schemas/product.schema';
 // Services
 import { ProductsService } from './products.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Product, ProductSchema } from './schemas/product.schema';
 
 
 @Module({

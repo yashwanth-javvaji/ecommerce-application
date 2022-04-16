@@ -1,12 +1,27 @@
+// NestJS
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+
+// Other Dependencies
 import { Type } from "class-transformer";
 import mongoose from "mongoose";
-import { Document } from 'mongoose';
-import { User } from "src/users/schemas/user.schema";
+
+// Custom
+// Schemas
+import { User } from "../../users/schemas/user.schema";
+
 
 export type ReviewDocument = Review & Document;
 
-@Schema({ timestamps: true })
+@Schema({
+  timestamps: true,
+  versionKey: false,
+  toJSON: {
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    }
+  }
+})
 export class Review {
   @Prop({
     type: Number,
@@ -31,10 +46,4 @@ export class Review {
   user: User;
 }
 
-export const ReviewSchema = SchemaFactory.createForClass(Review).set('toJSON', {
-  virtuals: true,
-  versionKey: false,
-  transform: function (doc, ret) {
-    delete ret._id
-  }
-});
+export const ReviewSchema = SchemaFactory.createForClass(Review);

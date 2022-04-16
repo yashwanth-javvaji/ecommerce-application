@@ -6,26 +6,10 @@ import { getCurrentUser } from './auth';
 import getAuthHeader from './auth-header';
 
 
+// constants
 const API_BASE_URL = '/api/users/';
 
-
-export const updateProfile = async ({ data, onSuccess, onError }) => {
-  const authHeader = getAuthHeader('accessToken');
-  if (!!authHeader) {
-    try {
-      const user = await getCurrentUser();
-      await axios.patch(API_BASE_URL + user.id, data, { headers: authHeader });
-      if (onSuccess) {
-        onSuccess();
-      }
-    } catch (err) {
-      if (err.response && onError) {
-        onError(err.response.data.message);
-      }
-    }
-  }
-};
-
+// POST (User)
 export const uploadProfileImage = async (file) => {
   const formData = new FormData();
   formData.append("file", file);
@@ -41,6 +25,7 @@ export const uploadProfileImage = async (file) => {
   }
 };
 
+// GET (Public)
 export const getProfileImage = async (filename) => {
   try {
     const res = await axios.get(API_BASE_URL + 'profile-images/' + filename, { responseType: 'blob' });
@@ -48,5 +33,23 @@ export const getProfileImage = async (filename) => {
   }
   catch (err) {
     console.log(err);
+  }
+};
+
+// PATCH (Auth)
+export const updateProfile = async ({ data, onSuccess, onError }) => {
+  const authHeader = getAuthHeader('accessToken');
+  if (!!authHeader) {
+    try {
+      const user = await getCurrentUser();
+      await axios.patch(API_BASE_URL + user.id, data, { headers: authHeader });
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (err) {
+      if (err.response && onError) {
+        onError(err.response.data.message);
+      }
+    }
   }
 };

@@ -2,15 +2,15 @@
 import { useEffect, useState } from "react";
 
 // Next
-import Router from 'next/router';
+import Head from 'next/head';
 import Image from 'next/image';
+import Router from 'next/router';
 
 // Material UI
 // Components
 import Alert from '@mui/material/Alert';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Grid from "@mui/material/Grid";
@@ -26,13 +26,13 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 // Custom
 // Components
 import ComponentHeader from "../../../components/ComponentHeader";
-// HOC
+// HOCs
 import isAdmin from "../../../HOC/isAdmin";
 // Services
 import { getAllCategories } from '../../../services/categories';
 import { createProduct, uploadProductImage } from "../../../services/products";
 // Utils
-import { checkFloatRange, checkIntRange, checkIsEmpty } from "../../../utils/error-handling/validation";
+import { checkFloatRange, checkIntRange, checkIsEmpty, checkLength } from "../../../utils/error-handling/validation";
 import { formatErrorMessage } from '../../../utils/error-handling/format-error-message';
 
 
@@ -59,7 +59,7 @@ const AddProduct = () => {
         // name
         if (attributes.includes("name")) {
             const value = target ? target.value : formData.name;
-            isError |= checkIsEmpty(value, "name", errors, setErrors);
+            isError |= checkIsEmpty(value, "name", errors, setErrors) || checkLength(value, { min: 3 }, "name", errors, setErrors);
         }
         // category
         if (attributes.includes("category")) {
@@ -73,12 +73,12 @@ const AddProduct = () => {
         // description
         if (attributes.includes("description")) {
             const value = target ? target.value : formData.description;
-            isError |= checkIsEmpty(value, "description", errors, setErrors);
+            isError |= checkIsEmpty(value, "description", errors, setErrors) || checkLength(value, { min: 20 }, "description", errors, setErrors);
         }
         // brand
         if (attributes.includes("brand")) {
             const value = target ? target.value : formData.brand;
-            isError |= checkIsEmpty(value, "brand", errors, setErrors);
+            isError |= checkIsEmpty(value, "brand", errors, setErrors) || checkLength(value, { min: 3 }, "brand", errors, setErrors);
         }
         // stock
         if (attributes.includes("stock")) {
@@ -171,8 +171,11 @@ const AddProduct = () => {
         return <p>Loading...</p>
     }
     return (
-        <Container>
-            <Grid container spacing={3}>
+        <>
+            <Head>
+                <title>SKY | Admin - Add Category</title>
+            </Head>
+            <Grid container spacing={2}>
                 <ComponentHeader
                     icon={CreateIcon}
                     title="Add Product"
@@ -183,7 +186,7 @@ const AddProduct = () => {
                     <Paper sx={{ p: 3 }}>
                         <Box component="form" id="addProductForm" noValidate onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
-                                {!!errors.message && (
+                                {(!!errors.message) && (
                                     <Grid item xs={12}>
                                         <Alert severity="error">{errors.message}</Alert>
                                     </Grid>
@@ -222,7 +225,7 @@ const AddProduct = () => {
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    {!!productImageUrl && (
+                                    {(!!productImageUrl) && (
                                         <Box>
                                             <Image
                                                 src={productImageUrl}
@@ -338,7 +341,7 @@ const AddProduct = () => {
                     </Paper>
                 </Grid>
             </Grid>
-        </Container>
+        </>
     );
 };
 

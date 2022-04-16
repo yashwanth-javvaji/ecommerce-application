@@ -4,7 +4,6 @@ import axios from 'axios';
 // Custom
 // Services
 import getAuthHeader from './auth-header';
-import { getProfileImage } from './profile';
 
 
 // constants
@@ -15,7 +14,7 @@ const calculateRating = (reviews) => {
         return 0;
     }
     return Math.round((reviews.reduce((accumulator, review) => accumulator + review.rating, 0) / reviews.length) * 100) / 100;
-}
+};
 
 // POST (Admin)
 export const createProduct = async ({ data, onSuccess, onError }) => {
@@ -54,7 +53,6 @@ export const getAllProducts = async () => {
         const res = await axios.get(API_BASE_URL);
         const products = res.data;
         for (const product of products) {
-            product.productImage = await getProductImage(product.productImage);
             product.rating = calculateRating(product.reviews);
         }
         return products;
@@ -66,13 +64,7 @@ export const getProductById = async (id) => {
     try {
         const res = await axios.get(API_BASE_URL + id);
         const product = res.data;
-        console.log(product)
-        product.productImage = await getProductImage(product.productImage);
         product.rating = calculateRating(product.reviews);
-        for (const review of product.reviews) {
-            review.user.profileImage = await getProfileImage(review.user.profileImage);
-        }
-        console.log(product)
         return product;
     } catch (err) {
         console.log(err);
@@ -82,7 +74,6 @@ export const getProductsByCategory = async (category) => {
     try {
         const res = await axios.get(API_BASE_URL + "category/" + category);
         const products = res.data;
-        products.forEach(async (product) => product.productImage = await getProductImage(product.productImage));
         return products;
     } catch (err) {
         console.log(err);
