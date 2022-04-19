@@ -1,5 +1,5 @@
 // NestJS
-import { Controller, Logger } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 
 // Other Dependencies
@@ -19,7 +19,6 @@ export class UsersController {
 
   @EventPattern('createUser')
   async create(@Payload() createUserDto: CreateUserDto) {
-    Logger.log("products create user");
     await this.usersService.create(createUserDto);
   }
 

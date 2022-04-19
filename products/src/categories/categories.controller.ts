@@ -49,7 +49,7 @@ export class CategoriesController {
   @hasRoles(Role.Admin)
   @UseGuards(RolesGuard)
   @Patch(':id')
-  async update(@Param('id') id: ObjectId, @Body() updateCategoryDto: UpdateCategoryDto) {
+  async update(@Param('id') id: ObjectId, @Body() updateCategoryDto: UpdateCategoryDto): Promise<Category> {
     return await this.categoriesService.update(id, updateCategoryDto);
   }
 

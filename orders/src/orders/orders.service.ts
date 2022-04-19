@@ -50,7 +50,7 @@ export class OrdersService {
   }
 
   async update(id: ObjectId, updateOrderDto: UpdateOrderDto): Promise<Order> {
-    return await this.orderModel.findByIdAndUpdate(id, updateOrderDto, { new: true });
+    return await this.orderModel.findByIdAndUpdate(id, updateOrderDto, { new: true }).exec();
   }
 
   async remove(id: ObjectId) {

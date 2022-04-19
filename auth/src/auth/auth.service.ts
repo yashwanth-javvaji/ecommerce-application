@@ -61,7 +61,7 @@ export class AuthService {
     public async validateUser(signInAuthDto: SigninAuthDto): Promise<User> {
         const { email, password } = signInAuthDto;
         const user = await this.usersService.findOneByEmail(email);
-        if (!bcrypt.compare(password, user.password)) {
+        if (!(await bcrypt.compare(password, user.password))) {
             throw new UnauthorizedException('Invalid credentials');
         }
         return user;
@@ -117,7 +117,7 @@ export class AuthService {
         if (!user.currentHashedRefreshToken) {
             throw new UnauthorizedException('Please login');
         }
-        if (!await bcrypt.compare(refreshToken, user.currentHashedRefreshToken)) {
+        if (!(await bcrypt.compare(refreshToken, user.currentHashedRefreshToken))) {
             throw new UnauthorizedException('Invalid token');
         }
         const jwtPayload = (({ _id: id, firstname, lastname, email, roles }) => ({ id, firstname, lastname, email, roles }))(user);

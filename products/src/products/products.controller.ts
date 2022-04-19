@@ -50,26 +50,26 @@ export class ProductsController {
   }
 
   @Public()
+  @Get('/category/:category')
+  async findAllByCategory(@Param('category') category: string): Promise<Product[]> {
+    return await this.productsService.findAllByCategory(category);
+  }
+
+  @Public()
   @Get(':id')
   async findById(@Param('id') id: ObjectId): Promise<Product> {
     return await this.productsService.findById(id);
   }
 
-  @Public()
-  @Get('/category/:category')
-  async fingByCategory(@Param('category') category: string): Promise<Product[]> {
-    return await this.productsService.findByCategory(category);
-  }
-
   @hasRoles(Role.Admin)
   @UseGuards(RolesGuard)
   @Patch(':id')
-  update(@Param('id') id: ObjectId, @Body() updateProductDto: UpdateProductDto) {
+  update(@Param('id') id: ObjectId, @Body() updateProductDto: UpdateProductDto): Promise<Product> {
     return this.productsService.update(id, updateProductDto);
   }
 
   @Patch(':id/reviews')
-  async addReview(@Param('id') id: ObjectId, @Body('reviewId') reviewId) {
+  async addReview(@Param('id') id: ObjectId, @Body('reviewId') reviewId): Promise<Product> {
     return this.productsService.addReview(id, reviewId);
   }
 

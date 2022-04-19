@@ -37,7 +37,7 @@ export class CategoriesService {
   }
 
   async update(id: ObjectId, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
-    return await this.categoryModel.findByIdAndUpdate(id, updateCategoryDto, { new: true });
+    return await this.categoryModel.findByIdAndUpdate(id, updateCategoryDto, { new: true }).exec();
   }
 
   async remove(id: ObjectId): Promise<any> {

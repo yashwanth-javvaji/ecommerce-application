@@ -33,8 +33,8 @@ export class ReviewsService {
     return await this.reviewModel.findById(id).populate('user').exec();
   }
 
-  async update(id, updateReviewDto: UpdateReviewDto) {
-    return await this.reviewModel.findByIdAndUpdate(id, updateReviewDto, { new: true });
+  async update(id, updateReviewDto: UpdateReviewDto): Promise<Review> {
+    return await this.reviewModel.findByIdAndUpdate(id, updateReviewDto, { new: true }).populate('user').exec();
   }
 
   async remove(id) {

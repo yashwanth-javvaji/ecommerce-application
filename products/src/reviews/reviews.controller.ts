@@ -35,7 +35,7 @@ export class ReviewsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id, @Body() updateReviewDto: UpdateReviewDto) {
+  async update(@Param('id') id, @Body() updateReviewDto: UpdateReviewDto): Promise<Review> {
     return await this.reviewsService.update(id, updateReviewDto);
   }
 

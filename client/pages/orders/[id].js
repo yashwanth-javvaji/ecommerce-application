@@ -7,6 +7,7 @@ import Head from 'next/head';
 
 // Material UI
 // Components
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import Table from '@mui/material/Table';
@@ -87,20 +88,30 @@ const Order = () => {
                         <CardHeader title="Delivery Status" subheader={deliveryStatus} sx={{ textAlign: 'center' }} />
                     </Card>
                 </Grid>
-                <Grid item xs={6}>
-                    <Card>
-                        <CardHeader title="Placed On" subheader={moment(createdAt).format('MMMM Do, YYYY, hh:mm:ss a')} sx={{ textAlign: 'center' }} />
-                    </Card>
-                </Grid>
-                <Grid item xs={6}>
-                    <Card>
-                        <CardHeader title="Delivery On" subheader={deliveredOn ? moment(deliveredOn).format('MMMM Do, YYYY, hh:mm:ss a') : "-"} sx={{ textAlign: 'center' }} />
-                    </Card>
-                </Grid>
                 <Grid item xs={12}>
+                    <Box sx={{ w: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'grey.300' }}>
+                        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
+                            <Typography color="text.secondary">
+                                Placed On:
+                            </Typography>
+                            &nbsp;
+                            <Typography>
+                                {moment(createdAt).format('MMMM Do, YYYY, hh:mm:ss a')}
+                            </Typography>
+                        </Box>
+                        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
+                            <Typography color="text.secondary">
+                                Delivered On:
+                            </Typography>
+                            &nbsp;
+                            <Typography>
+                                {deliveredOn ? moment(deliveredOn).format('MMMM Do, YYYY, hh:mm:ss a') : "-"}
+                            </Typography>
+                        </Box>
+                    </Box>
                     <Table>
                         <TableBody>
-                            {items.map((item) => <Item item={item} />)}
+                            {items.map((item) => <Item key={item.id} item={item} />)}
                         </TableBody>
                     </Table>
                 </Grid>

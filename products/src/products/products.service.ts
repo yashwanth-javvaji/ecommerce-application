@@ -34,6 +34,19 @@ export class ProductsService {
     }).exec();
   }
 
+  async findAllByCategory(category: string): Promise<Product[]> {
+    return await this.productModel.find({
+      where: {
+        'category.name': category
+      }
+    }).populate('category').populate({
+      path: 'reviews',
+      populate: {
+        path: 'user'
+      }
+    }).exec();
+  }
+
   async findById(id: ObjectId): Promise<Product> {
     return await this.productModel.findById(id).populate('category').populate({
       path: 'reviews',
@@ -43,20 +56,22 @@ export class ProductsService {
     }).exec();
   }
 
-  async findByCategory(category: string): Promise<Product[]> {
-    return await this.productModel.find({
-      where: {
-        'category.name': category
+  async update(id: ObjectId, updateProductDto: UpdateProductDto): Promise<Product> {
+    return await this.productModel.findByIdAndUpdate(id, updateProductDto, { new: true }).populate('category').populate({
+      path: 'reviews',
+      populate: {
+        path: 'user'
       }
     }).exec();
   }
 
-  async update(id: ObjectId, updateProductDto: UpdateProductDto): Promise<Product> {
-    return await this.productModel.findByIdAndUpdate(id, updateProductDto, { new: true });
-  }
-
   async addReview(id: ObjectId, reviewId: ObjectId): Promise<Product> {
-    return await this.productModel.findByIdAndUpdate(id, { $push: { reviews: reviewId } }, { new: true });
+    return await this.productModel.findByIdAndUpdate(id, { $push: { reviews: reviewId } }, { new: true }).populate('category').populate({
+      path: 'reviews',
+      populate: {
+        path: 'user'
+      }
+    }).exec();
   }
 
   async remove(id) {
