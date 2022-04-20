@@ -111,7 +111,7 @@ const Home = () => {
             linkText="View All"
             variant="text"
           />
-          <Grid container spacing={3}>
+          <Grid container spacing={1}>
             {categories.map((category) => (
               <Grid key={category} item xs="auto">
                 <Button variant="outlined" href={`/products?category=${category}`} sx={{ fontWeight: 600 }}>{category}</Button>

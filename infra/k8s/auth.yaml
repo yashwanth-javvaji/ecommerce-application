@@ -48,6 +48,16 @@ spec:
                 secretKeyRef:
                   name: jwt-refresh-token-expiration-time
                   key: JWT_REFRESH_TOKEN_EXPIRATION_TIME
+            - name: ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: admin-email
+                  key: ADMIN_EMAIL
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: admin-password
+                  key: ADMIN_PASSWORD
 
 ---
 

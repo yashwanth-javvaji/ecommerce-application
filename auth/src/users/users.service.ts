@@ -28,8 +28,8 @@ export class UsersService implements OnModuleInit {
     const createdAdmin = new this.userModel({
       "firstname": "Admin",
       "lastname": "SKY E-Commerce",
-      "email": "admin@major-project.com",
-      "password": "password",
+      "email": process.env.ADMIN_EMAIL,
+      "password": process.env.ADMIN_PASSWORD,
       "roles": [Role.Admin]
     });
     this.client.emit('createUser', createdAdmin);
