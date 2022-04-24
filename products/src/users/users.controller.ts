@@ -17,17 +17,17 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
-  @EventPattern('createUser')
+  @EventPattern('userCreated')
   async create(@Payload() createUserDto: CreateUserDto) {
     await this.usersService.create(createUserDto);
   }
 
-  @EventPattern('updateUser')
+  @EventPattern('userUpdated')
   async update(@Payload() updateUserDto: UpdateUserDto) {
     await this.usersService.update(updateUserDto.id, updateUserDto);
   }
 
-  @EventPattern('removeUser')
+  @EventPattern('userRemoved')
   async remove(@Payload() id: ObjectId) {
     await this.usersService.remove(id);
   }

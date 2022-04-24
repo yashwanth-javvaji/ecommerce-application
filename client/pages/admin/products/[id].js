@@ -114,15 +114,13 @@ const EditProduct = () => {
     };
 
     const handleProductImageChange = (event) => {
-        if (!event.target.files || event.target.files.length === 0) {
+        if (!checkImage(event.target.files[0], 5, { width: 300, height: 300 }, "productImage", errors, setErrors)) {
+            delete errors.productImage;
+            setErrors(errors);
+            setProductImage(event.target.files[0]);
+        } else {
             setProductImage(null);
-            setErrors({
-                ...errors,
-                productImage: "required"
-            });
-            return;
         }
-        setProductImage(event.target.files[0]);
     };
 
     const handleSubmit = async (event) => {
@@ -201,7 +199,7 @@ const EditProduct = () => {
             <Grid container spacing={2}>
                 <ComponentHeader
                     icon={CreateIcon}
-                    title="Add Product"
+                    title="Edit Product"
                     href="/admin/products"
                     linkText="Back to Products List"
                 />

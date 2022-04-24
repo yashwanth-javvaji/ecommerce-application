@@ -32,7 +32,7 @@ import isAdmin from "../../../HOC/isAdmin";
 import { getAllCategories } from '../../../services/categories';
 import { createProduct, uploadProductImage } from "../../../services/products";
 // Utils
-import { checkFloatRange, checkIntRange, checkIsEmpty, checkLength } from "../../../utils/error-handling/validation";
+import { checkFloatRange, checkImage, checkIntRange, checkIsEmpty, checkLength } from "../../../utils/error-handling/validation";
 import { formatErrorMessage } from '../../../utils/error-handling/format-error-message';
 
 
@@ -111,17 +111,13 @@ const AddProduct = () => {
     };
 
     const handleProductImageChange = (event) => {
-        if (!event.target.files || event.target.files.length === 0) {
+        if (!checkImage(event.target.files[0], 5, { width: 300, height: 300 }, "productImage", errors, setErrors)) {
+            delete errors.productImage;
+            setErrors(errors);
+            setProductImage(event.target.files[0]);
+        } else {
             setProductImage(null);
-            setErrors({
-                ...errors,
-                productImage: "required"
-            });
-            return;
         }
-        delete errors.productImage;
-        setErrors(errors);
-        setProductImage(event.target.files[0]);
     };
 
     const handleSubmit = async (event) => {
@@ -173,7 +169,7 @@ const AddProduct = () => {
     return (
         <>
             <Head>
-                <title>SKY | Admin - Add Category</title>
+                <title>SKY | Admin - Add Product</title>
             </Head>
             <Grid container spacing={2}>
                 <ComponentHeader

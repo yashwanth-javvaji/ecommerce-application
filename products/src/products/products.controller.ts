@@ -19,6 +19,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './schemas/product.schema';
 // Services
 import { ProductsService } from './products.service';
+import { EventPattern, Payload } from '@nestjs/microservices';
 
 
 export const storage = {
@@ -64,8 +65,22 @@ export class ProductsController {
   @hasRoles(Role.Admin)
   @UseGuards(RolesGuard)
   @Patch(':id')
-  update(@Param('id') id: ObjectId, @Body() updateProductDto: UpdateProductDto): Promise<Product> {
-    return this.productsService.update(id, updateProductDto);
+  async update(@Param('id') id: ObjectId, @Body() updateProductDto: UpdateProductDto): Promise<Product> {
+    return await this.productsService.update(id, updateProductDto);
+  }
+
+  @EventPattern('orderCreated')
+  async orderCreated(@Payload() order) {
+    order.items.forEach((product) => {
+      this.productsService.updateStock(product.id, -product.quantity);
+    });
+  }
+  
+  @EventPattern('orderCancelled')
+  async orderCancelled(@Payload() order) {
+    order.items.forEach((product) => {
+      this.productsService.updateStock(product.id, product.quantity);
+    });
   }
 
   @Patch(':id/reviews')

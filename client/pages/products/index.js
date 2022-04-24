@@ -24,6 +24,9 @@ import Typography from '@mui/material/Typography';
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
+// Other Dependencies
+import { motion } from 'framer-motion';
+
 // Custom
 // Components
 import ListPagination from "../../components/ListPagination";
@@ -202,7 +205,7 @@ const ProductsDashboard = () => {
                         <Button variant="contained" fullWidth onClick={() => setFilters(initialFiltersState)}>Clear filters</Button>
                     </Grid>
                 </Grid>
-                <Grid item xs={9} container spacing={3}>
+                <Grid item xs={9} container spacing={3} component={motion.div} layout>
                     <ListPagination
                         type="products"
                         list={sortProducts(products.filter((product) => {
@@ -220,7 +223,7 @@ const ProductsDashboard = () => {
                             }
                             return true;
                         })).map((product) => (
-                            <Grid key={product.id} item xs={4}>
+                            <Grid key={product.id} item xs={4} component={motion.div} layout>
                                 <Product product={product} />
                             </Grid>
                         ))}

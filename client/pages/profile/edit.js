@@ -11,6 +11,8 @@ import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
@@ -27,7 +29,7 @@ import withCurrentUser from "../../HOC/withCurrentUser";
 // Services
 import { getProfileImage, updateProfile, uploadProfileImage } from "../../services/profile";
 // Utils
-import { checkIsEmail, checkIsEmpty } from "../../utils/error-handling/validation";
+import { checkImage, checkIsEmail, checkIsEmpty } from "../../utils/error-handling/validation";
 import { formatErrorMessage } from '../../utils/error-handling/format-error-message';
 
 
@@ -75,11 +77,13 @@ const EditProfile = ({ currentUser }) => {
     };
 
     const handleProfileImageChange = (event) => {
-        if (!event.target.files || event.target.files.length === 0) {
+        if (!checkImage(event.target.files[0], 5, { width: 500, height: 500 }, "profileImage", errors, setErrors)) {
+            delete errors.profileImage;
+            setErrors(errors);
+            setProfileImage(event.target.files[0]);
+        } else {
             setProfileImage(null);
-            return;
         }
-        setProfileImage(event.target.files[0]);
     };
 
     const handleSubmit = (event) => {
@@ -144,12 +148,15 @@ const EditProfile = ({ currentUser }) => {
                                         </Grid>
                                     )}
                                     <Grid item>
-                                        <label htmlFor="profileImage">
-                                            <input accept="image/*" id="profileImage" name="profileImage" type="file" onChange={handleProfileImageChange} style={{ display: 'none' }} />
-                                            <Button variant="contained" component="span" startIcon={<PhotoCamera />}>
-                                                Upload
-                                            </Button>
-                                        </label>
+                                        <FormControl required error={!!errors.profileImage}>
+                                            <label htmlFor="profileImage">
+                                                <input accept="image/*" id="profileImage" name="profileImage" type="file" onChange={handleProfileImageChange} style={{ display: 'none' }} />
+                                                <Button variant="contained" component="span" startIcon={<PhotoCamera />}>
+                                                    Upload
+                                                </Button>
+                                                <FormHelperText>{errors.profileImage}</FormHelperText>
+                                            </label>
+                                        </FormControl>
                                     </Grid>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>

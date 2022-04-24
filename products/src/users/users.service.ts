@@ -20,7 +20,7 @@ export class UsersService {
   ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    delete Object.assign(createUserDto, {["_id"]: createUserDto["id"] })["id"];
+    delete Object.assign(createUserDto, { ["_id"]: createUserDto["id"] })["id"];
     const createdUser = new this.userModel(createUserDto);
     return createdUser.save();
   }
@@ -39,6 +39,6 @@ export class UsersService {
   }
 
   async remove(id: ObjectId) {
-    return await this.userModel.findByIdAndRemove(id);
+    await this.userModel.findByIdAndRemove(id);
   }
 }

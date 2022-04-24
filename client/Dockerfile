@@ -1,8 +1,8 @@
 # FROM node:lts-alpine AS dependencies
 # # RUN apk add --no-cache libc6-compat
 # WORKDIR /app
-# COPY package.json package-lock.json ./
-# RUN npm ci
+# COPY ./package.json ./package-lock.json ./
+# RUN npm install
 
 # FROM node:lts-alpine AS builder
 # WORKDIR /app
@@ -35,5 +35,6 @@ WORKDIR /app
 COPY package.json .
 RUN npm install
 COPY . .
+# RUN npm run build
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]

@@ -14,6 +14,9 @@ import DiscountIcon from '@mui/icons-material/Discount';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import StarIcon from '@mui/icons-material/Star';
 
+// Other Dependencies
+import { motion } from 'framer-motion';
+
 // Custom
 // Components
 import ComponentHeader from '../components/ComponentHeader';
@@ -55,7 +58,14 @@ const Home = () => {
         <title>SKY | Home</title>
       </Head>
       <Grid container spacing={9}>
-        <Grid item xs={12}>
+        <Grid
+          item
+          xs={12}
+          initial={{ opacity: 0 }}
+          component={motion.div}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
           <ComponentHeader
             icon={StarIcon}
             title="Top Rated"
@@ -71,7 +81,14 @@ const Home = () => {
             ))}
           </Grid>
         </Grid>
-        <Grid item xs={12}>
+        <Grid
+          item
+          xs={12}
+          initial={{ opacity: 0 }}
+          component={motion.div}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
           <ComponentHeader
             icon={FiberNewIcon}
             title="Latest Arrivals"
@@ -87,7 +104,14 @@ const Home = () => {
             ))}
           </Grid>
         </Grid>
-        <Grid item xs={12}>
+        <Grid
+          item
+          xs={12}
+          initial={{ opacity: 0 }}
+          component={motion.div}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
           <ComponentHeader
             icon={DiscountIcon}
             title="Big Discounts"
@@ -103,7 +127,14 @@ const Home = () => {
             ))}
           </Grid>
         </Grid>
-        <Grid item xs={12}>
+        <Grid
+          item
+          xs={12}
+          initial={{ opacity: 0 }}
+          component={motion.div}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
           <ComponentHeader
             icon={CategoryIcon}
             title="Categories"

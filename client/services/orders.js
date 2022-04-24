@@ -42,11 +42,15 @@ export const getAllOrders = async () => {
     }
 };
 // (Admin)
-export const getOrderById = async () => {
-    try {
-        const res = await axios.get(API_BASE_URL + id);
-    } catch (err) {
-        console.log(err);
+export const getOrderById = async (id) => {
+    const authHeader = getAuthHeader('accessToken');
+    if (!!authHeader) {
+        try {
+            const res = await axios.get(API_BASE_URL + id, { headers: authHeader });
+            return res.data;
+        } catch (err) {
+            console.log(err);
+        }
     }
 };
 // (User)

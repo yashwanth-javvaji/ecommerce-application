@@ -32,13 +32,13 @@ export class UsersService implements OnModuleInit {
       "password": process.env.ADMIN_PASSWORD,
       "roles": [Role.Admin]
     });
-    this.client.emit('createUser', createdAdmin);
+    this.client.emit('userCreated', createdAdmin);
     createdAdmin.save();
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
-    this.client.emit('createUser', createdUser);
+    this.client.emit('userCreated', createdUser);
     return createdUser.save();
   }
 
@@ -57,13 +57,13 @@ export class UsersService implements OnModuleInit {
   async update(id: ObjectId, updateUserDto: Partial<UpdateUserDto>): Promise<User> {
     const updatedUser = await this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
     if (!!updatedUser) {
-      this.client.emit('updateUser', updatedUser);
+      this.client.emit('userUpdated', updatedUser);
       return updatedUser;
     }
   }
 
   async remove(id: ObjectId) {
     await this.userModel.findByIdAndRemove(id);
-    this.client.emit('removeUser', id);
+    this.client.emit('userRemoved', id);
   }
 }

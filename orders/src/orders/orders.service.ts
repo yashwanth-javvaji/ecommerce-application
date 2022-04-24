@@ -1,6 +1,10 @@
 // NestJS
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
+
+// Common
+import { OrderStatus } from '@yj-major-project/common';
 
 // Other Dependencies
 import { Model, ObjectId } from 'mongoose';
@@ -16,8 +20,8 @@ import { Order, OrderDocument } from './schemas/order.schema';
 @Injectable()
 export class OrdersService {
   constructor(
-    @InjectModel(Order.name)
-    private readonly orderModel: Model<OrderDocument>
+    @InjectModel(Order.name) private readonly orderModel: Model<OrderDocument>,
+    @Inject('ORDERS_SERVICE') private readonly client: ClientProxy
   ) { }
 
   async create(userId: ObjectId, createOrderDto: CreateOrderDto): Promise<Order> {
@@ -25,6 +29,7 @@ export class OrdersService {
       ...createOrderDto,
       userId
     });
+    this.client.emit('orderCreated', createdOrder);
     return createdOrder.save();
   }
 
@@ -50,10 +55,14 @@ export class OrdersService {
   }
 
   async update(id: ObjectId, updateOrderDto: UpdateOrderDto): Promise<Order> {
-    return await this.orderModel.findByIdAndUpdate(id, updateOrderDto, { new: true }).exec();
+    const updatedOrder = await this.orderModel.findByIdAndUpdate(id, updateOrderDto, { new: true }).exec();
+    if (updatedOrder.orderStatus === OrderStatus.Cancelled) {
+      this.client.emit('orderCancelled', updatedOrder);
+    }
+    return updatedOrder;
   }
 
   async remove(id: ObjectId) {
-    return await this.orderModel.findByIdAndRemove(id);
+    await this.orderModel.findByIdAndRemove(id);
   }
 }

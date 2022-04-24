@@ -65,6 +65,19 @@ export class ProductsService {
     }).exec();
   }
 
+  async updateStock(id: ObjectId, quantity: Number): Promise<Product> {
+    return await this.productModel.findByIdAndUpdate(id, {
+      "$inc": { "stock": quantity }
+    }, {
+      new: true
+    }).populate('category').populate({
+      path: 'reviews',
+      populate: {
+        path: 'user'
+      }
+    }).exec();
+  }
+
   async addReview(id: ObjectId, reviewId: ObjectId): Promise<Product> {
     return await this.productModel.findByIdAndUpdate(id, { $push: { reviews: reviewId } }, { new: true }).populate('category').populate({
       path: 'reviews',
@@ -75,6 +88,6 @@ export class ProductsService {
   }
 
   async remove(id) {
-    return await this.productModel.findByIdAndRemove(id);
+    await this.productModel.findByIdAndRemove(id);
   }
 }

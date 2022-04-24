@@ -27,12 +27,14 @@ export const uploadProfileImage = async (file) => {
 
 // GET (Public)
 export const getProfileImage = async (filename) => {
-  try {
-    const res = await axios.get(API_BASE_URL + 'profile-images/' + filename, { responseType: 'blob' });
-    return URL.createObjectURL(res.data);
-  }
-  catch (err) {
-    console.log(err);
+  if (!!filename) {
+    try {
+      const res = await axios.get(API_BASE_URL + 'profile-images/' + filename, { responseType: 'blob' });
+      return URL.createObjectURL(res.data);
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 };
 

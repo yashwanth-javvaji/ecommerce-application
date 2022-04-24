@@ -1,5 +1,6 @@
 // NestJS
 import { Module } from '@nestjs/common';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MongooseModule } from '@nestjs/mongoose';
 
 // Custom
@@ -13,6 +14,19 @@ import { OrdersService } from './orders.service';
 
 @Module({
   imports: [
+    ClientsModule.register([
+      {
+        name: 'ORDERS_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqps://wjdovbpn:boXVmPjKWIlMJ0xaTBqm_5jBgA36EuSg@lionfish.rmq.cloudamqp.com/wjdovbpn'],
+          queue: 'orders_queue',
+          queueOptions: {
+            durable: false
+          }
+        }
+      }
+    ]),
     MongooseModule.forFeature([{ name: Order.name, schema: OrderSchema }])
   ],
   controllers: [OrdersController],

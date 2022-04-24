@@ -21,6 +21,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
 // Other Dependencies
+import { motion } from 'framer-motion';
 import { useCart } from "react-use-cart";
 
 // Custom
@@ -44,7 +45,11 @@ const Product = ({ product }) => {
     }, [product.productImage]);
 
     return (
-        <Card>
+        <Card
+            component={motion.div}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+        >
             <CardActionArea sx={{ position: 'relative' }} onClick={() => Router.push(`/products/${product.id}`)}>
                 <CardMedia
                     component="img"
@@ -81,8 +86,9 @@ const Product = ({ product }) => {
                 {(!!item) ? (
                     <Button
                         variant="contained"
+                        color={(stock === item.quantity) ? 'error' : 'primary'}
                         startIcon={<RemoveIcon onClick={() => updateItemQuantity(item.id, item.quantity - 1)} />}
-                        endIcon={<AddIcon onClick={() => updateItemQuantity(item.id, item.quantity + 1 > stock ? stock : item.quantity + 1)} />}
+                        endIcon={<AddIcon onClick={() => (stock > item.quantity) && updateItemQuantity(item.id, item.quantity + 1)} />}
                         sx={{ ml: 'auto' }}
                     >
                         {item.quantity}

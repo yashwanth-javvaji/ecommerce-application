@@ -40,7 +40,7 @@ export class CategoriesService {
     return await this.categoryModel.findByIdAndUpdate(id, updateCategoryDto, { new: true }).exec();
   }
 
-  async remove(id: ObjectId): Promise<any> {
-    return await this.categoryModel.findByIdAndRemove(id);
+  async remove(id: ObjectId) {
+    await this.categoryModel.findByIdAndRemove(id);
   }
 }

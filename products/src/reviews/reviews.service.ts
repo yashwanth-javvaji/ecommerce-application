@@ -38,6 +38,6 @@ export class ReviewsService {
   }
 
   async remove(id) {
-    return await this.reviewModel.findByIdAndRemove(id);
+    await this.reviewModel.findByIdAndRemove(id);
   }
 }

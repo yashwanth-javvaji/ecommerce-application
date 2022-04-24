@@ -95,4 +95,31 @@ export const checkLength = (value, options, field, errors, setErrors) => {
         updateErrorsState(isError, field, errors, setErrors, `should be less than ${options.max} characters`);
     }
     return isError;
-}
+};
+
+export const checkImage = async (file, sizeInMb, dimensions, field, errors, setErrors) => {
+    const isError = false;
+    if (!file) {
+        isError = true;
+        updateErrorsState(isError, field, errors, setErrors, "required");
+    } else if ((file.size / (1024 * 1024)) > sizeInMb) {
+        isError = true;
+        updateErrorsState(isError, field, errors, setErrors, `size should be less than ${sizeInMb}mb`);
+    } else {
+        const checkDimensions = async () => {
+            return new Promise((resolve, reject) => {
+                const image = new Image();
+                image.src = URL.createObjectURL(file);
+                image.onload = () => {
+                    if ((image.width !== dimensions.width) && (image.height !== dimensions.height)) {
+                        resolve(true);
+                    }
+                    resolve(false);
+                }
+            });
+        };
+        isError |= await checkDimensions();
+        updateErrorsState(isError, field, errors, setErrors, `should be of the dimension ${dimensions.width}x${dimensions.height} pixels`);
+    }
+    return isError;
+};

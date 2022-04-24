@@ -56,7 +56,7 @@ const Cart = () => {
                                 return (
                                     <Box key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <Typography variant="body1">
-                                            {name} &times; {quantity}
+                                            <strong>{quantity}</strong> &times; {name}
                                         </Typography>
                                         <Typography variant="body1">
                                             {numberToCurrency(itemTotal * (1 - (discount / 100)), 'en-IN', 'INR')}

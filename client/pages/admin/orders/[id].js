@@ -16,7 +16,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import Typography from '@mui/material/Typography';
 // Icons
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 
@@ -30,7 +29,7 @@ import Item from "../../../components/orders/Item";
 // HOCs
 import isAdmin from "../../../HOC/isAdmin";
 // Services
-import { getMyOrderById, updateOrder } from "../../../services/orders";
+import { getOrderById, updateOrder } from "../../../services/orders";
 // Utils
 import { numberToCurrency } from "../../../utils/products/formatter";
 
@@ -65,7 +64,7 @@ const Order = () => {
 
     useEffect(() => {
         if (id) {
-            getMyOrderById(id)
+            getOrderById(id)
                 .then((order) => {
                     setOrder(order);
                     setFormData({
@@ -84,17 +83,15 @@ const Order = () => {
     if (isLoading) {
         return <p>Loading...</p>
     }
-    if (!order) {
-        return <Typography color="text.secondary">Order does not exist</Typography>
-    }
 
     const { orderStatus, deliveryStatus } = formData;
     const { paymentStatus, createdAt, deliveredOn, items, total, shippingAddress } = order;
+    console.log(order, items);
 
     return (
         <>
             <Head>
-                <title>SKY | dmin - Edit Order</title>
+                <title>SKY | Admin - Edit Order</title>
             </Head>
             <Box component="form" id="updateOrderForm" noValidate onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
@@ -158,7 +155,7 @@ const Order = () => {
                     <Grid item xs={12}>
                         <Table>
                             <TableBody>
-                                {items.map((item) => <Item item={item} isAdmin={true} />)}
+                                {items.map((item) => <Item key={item.id} item={item} isAdmin={true} />)}
                             </TableBody>
                         </Table>
                     </Grid>
