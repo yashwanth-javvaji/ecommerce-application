@@ -86,7 +86,6 @@ const Order = () => {
 
     const { orderStatus, deliveryStatus } = formData;
     const { paymentStatus, createdAt, deliveredOn, items, total, shippingAddress } = order;
-    console.log(order, items);
 
     return (
         <>
