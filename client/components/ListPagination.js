@@ -8,6 +8,9 @@ import Grid from '@mui/material/Grid';
 import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 
+// Other Dependencies
+import { motion } from 'framer-motion';
+
 
 const ListPagination = ({ type, list, itemsPerPage }) => {
     const [page, setPage] = useState(1);
@@ -22,7 +25,7 @@ const ListPagination = ({ type, list, itemsPerPage }) => {
 
     if (list.length === 0) {
         return (
-            <Grid item xs={12}>
+            <Grid item xs={12} component={motion.div} layout>
                 <Typography variant="body2" color="text.secondary" mt={1}>
                     No {type} to show
                 </Typography>
@@ -32,7 +35,7 @@ const ListPagination = ({ type, list, itemsPerPage }) => {
         return (
             <>
                 {list.slice(firstItemInPage, lastItemInPage + 1).map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)}
-                <Grid item xs={12}>
+                <Grid item xs={12} component={motion.div} layout>
                     <Box
                         sx={{
                             display: "flex",
