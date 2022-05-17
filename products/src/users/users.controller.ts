@@ -13,7 +13,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
 
-@Controller()
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
@@ -23,7 +23,7 @@ export class UsersController {
   }
 
   @EventPattern('userUpdated')
-  async update(@Payload() updateUserDto: UpdateUserDto) {
+  async update(@Payload() updateUserDto: Partial<UpdateUserDto>) {
     await this.usersService.update(updateUserDto.id, updateUserDto);
   }
 

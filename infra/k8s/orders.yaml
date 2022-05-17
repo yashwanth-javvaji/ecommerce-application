@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orders-depl
+  name: orders-deployment
 spec:
   replicas: 1
   selector:
@@ -17,44 +17,22 @@ spec:
           image: yashwanthjavvaji/orders
           env:
             - name: MONGO_URI
-              value: 'mongodb://orders-mongo-srv:27017/orders'
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: JWT_SECRET
-            - name: JWT_EXPIRATION_TIME
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-expiration-time
-                  key: JWT_EXPIRATION_TIME
+              value: 'mongodb://orders-mongo-service:27017/orders'
             - name: JWT_ACCESS_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
                   name: jwt-access-token-secret
                   key: JWT_ACCESS_TOKEN_SECRET
-            - name: JWT_ACCESS_TOKEN_EXPIRATION_TIME
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-access-token-expiration-time
-                  key: JWT_ACCESS_TOKEN_EXPIRATION_TIME
             - name: JWT_REFRESH_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
                   name: jwt-refresh-token-secret
-                  key: JWT_REFRESH_TOKEN_SECRET
-            - name: JWT_REFRESH_TOKEN_EXPIRATION_TIME
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-refresh-token-expiration-time
-                  key: JWT_REFRESH_TOKEN_EXPIRATION_TIME
-                  
+                  key: JWT_REFRESH_TOKEN_SECRET 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: orders-srv
+  name: orders-service
 spec:
   selector:
     app: orders

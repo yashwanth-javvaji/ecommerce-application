@@ -16,11 +16,11 @@ import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [
-    PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '30m' }
+      signOptions: { expiresIn: process.env.JWT_EXPIRATION_TIME }
     }),
+    PassportModule,
     UsersModule
   ],
   providers: [AuthService, LocalStrategy],

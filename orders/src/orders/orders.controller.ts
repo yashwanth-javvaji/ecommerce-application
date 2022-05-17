@@ -1,8 +1,9 @@
 // NestJS
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, NotFoundException } from '@nestjs/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
 
 // Common
-import { hasRoles, Role, RolesGuard } from '@yj-major-project/common';
+import { hasRoles, OrderStatus, PaymentStatus, Role, RolesGuard } from '@yj-major-project/common';
 
 // Other Dependencies
 import { ObjectId } from 'mongoose';
@@ -21,6 +22,8 @@ import { OrdersService } from './orders.service';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) { }
 
+  @hasRoles(Role.Admin)
+  @UseGuards(RolesGuard)
   @Post()
   async create(@Request() req, @Body() createOrderDto: CreateOrderDto): Promise<Order> {
     return await this.ordersService.create(req.user.id, createOrderDto);
@@ -53,8 +56,37 @@ export class OrdersController {
   @hasRoles(Role.Admin)
   @UseGuards(RolesGuard)
   @Patch(':id')
-  async update(@Param('id') id: ObjectId, @Body() updateOrderDto: UpdateOrderDto): Promise<Order> {
+  async update(@Param('id') id: ObjectId, @Body() updateOrderDto: Partial<UpdateOrderDto>): Promise<Order> {
     return await this.ordersService.update(id, updateOrderDto);
+  }
+
+  @EventPattern('expiredOrder')
+  async expiredOrder(@Payload() orderId: ObjectId) {
+    const order = await this.ordersService.findById(orderId);
+    if (!order) {
+      throw new NotFoundException();
+    }
+    if (order.orderStatus !== OrderStatus.Completed) {
+      await this.ordersService.update(orderId, {
+        orderStatus: OrderStatus.Canceled
+      });
+    }
+  }
+
+  @EventPattern('paymentSucceeded')
+  async paymentSucceeded(@Payload() orderId: ObjectId) {
+    const order = await this.ordersService.update(orderId, {
+      orderStatus: OrderStatus.Confirmed,
+      paymentStatus: PaymentStatus.Paid 
+    });
+  }
+
+  @EventPattern('paymentFailed')
+  async paymentFailed(@Payload() orderId: ObjectId) {
+    const order = await this.ordersService.update(orderId, {
+      orderStatus: OrderStatus.Canceled,
+      paymentStatus: PaymentStatus.Failed 
+    });
   }
 
   @hasRoles(Role.Admin)

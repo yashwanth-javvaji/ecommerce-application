@@ -1,4 +1,4 @@
-// React
+// ReactJS
 import { useEffect, useState } from 'react';
 
 // NextJS
@@ -45,12 +45,14 @@ const Product = ({ product }) => {
     }, [product.productImage]);
 
     return (
-        <Card
-            component={motion.div}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-        >
-            <CardActionArea sx={{ position: 'relative' }} onClick={() => Router.push(`/products/${product.id}`)}>
+        <Card        >
+            <CardActionArea
+                component={motion.div}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                sx={{ position: 'relative' }}
+                onClick={() => Router.push(`/products/${product.id}`)}
+            >
                 <CardMedia
                     component="img"
                     height={300}

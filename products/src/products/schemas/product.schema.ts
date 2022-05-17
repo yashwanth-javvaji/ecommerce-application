@@ -11,7 +11,7 @@ import { Category } from "../../categories/schemas/category.schema";
 import { Review } from "../../reviews/schemas/review.schema";
 
 
-export type ProductDocument = Product & Document;
+export type ProductDocument = Product & mongoose.Document;
 
 @Schema({
   timestamps: true,

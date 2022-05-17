@@ -38,16 +38,20 @@ export const storage = {
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
+  @hasRoles(Role.Admin)
+  @UseGuards(RolesGuard)
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return await this.usersService.create(createUserDto);
   }
 
+  @Public()
   @Get()
   async findAll(): Promise<User[]> {
     return await this.usersService.findAll();
   }
 
+  @Public()
   @Get(':id')
   async findById(@Param('id') id: ObjectId): Promise<User> {
     return await this.usersService.findById(id);
@@ -55,7 +59,7 @@ export class UsersController {
 
   @UseGuards(IsCurrentUser)
   @Patch(':id')
-  async update(@Param('id') id: ObjectId, @Body() updateUserDto: UpdateUserDto): Promise<User> {
+  async update(@Param('id') id: ObjectId, @Body() updateUserDto: Partial<UpdateUserDto>): Promise<User> {
     return await this.usersService.update(id, updateUserDto);
   }
 

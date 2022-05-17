@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-mongo-depl
+  name: auth-mongo-deployment
 spec:
   replicas: 1
   selector:
@@ -13,20 +13,66 @@ spec:
         app: auth-mongo
     spec:
       containers:
-        - name: auth-mongo
-          image: mongo
-
+      - name: auth-mongo
+        image: mongo
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-mongo-srv
+  name: auth-mongo-service
 spec:
   selector:
     app: auth-mongo
   ports:
-    - name: db
-      protocol: TCP
-      port: 27017
-      targetPort: 27017
+  - name: db
+    protocol: TCP
+    port: 27017
+    targetPort: 27017
+
+# apiVersion: apps/v1
+# kind: StatefulSet
+# metadata:
+#   name: auth-mongo-statefulset
+# spec:
+#   serviceName: auth-mongo-service
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: auth-mongo
+#   template:
+#     metadata:
+#       labels:
+#         app: auth-mongo
+#     spec:
+#       terminationGracePeriodSeconds: 10
+#       containers:
+#       - name: auth-mongo
+#         image: mongo
+#         ports:
+#         - containerPort: 27017
+#         volumeMounts:
+#         - name: auth-mongo-persistent-storage
+#           mountPath: /data/db
+#   volumeClaimTemplates:
+#   - metadata:
+#       name: auth-mongo-persistent-storage
+#       annotations:
+#         volume.beta.kubernetes.io/storage-class: "standard"
+#     spec:
+#       accessModes: [ "ReadWriteOnce" ]
+#       resources:
+#         requests:
+#           storage: 1Gi
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: auth-mongo-service
+# spec:
+#   selector:
+#     app: auth-mongo
+#   ports:
+#   - name: db
+#     protocol: TCP
+#     port: 27017
+#     targetPort: 27017

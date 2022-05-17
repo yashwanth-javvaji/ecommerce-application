@@ -128,41 +128,41 @@ describe('ReviewsService', () => {
     });
   });
 
-  describe('update', () => {
-    it('should call findByIdAndUpdate method on the model', async () => {
-      await service.update(reviewId, {
-        rating: 5
-      });
-      expect(model.findByIdAndUpdate).toHaveBeenCalled();
-    });
+  // describe('update', () => {
+  //   it('should call findByIdAndUpdate method on the model', async () => {
+  //     await service.update(reviewId, {
+  //       rating: 5
+  //     });
+  //     expect(model.findByIdAndUpdate).toHaveBeenCalled();
+  //   });
 
-    it('should call findByIdAndUpdate method on the model with review id and update review dto', async () => {
-      await service.update(reviewId, {
-        rating: 5
-      });
-      expect(model.findByIdAndUpdate).toHaveBeenCalledWith(reviewId, {
-        rating: 5
-      }, {
-        new: true
-      });
-    });
+  //   it('should call findByIdAndUpdate method on the model with review id and update review dto', async () => {
+  //     await service.update(reviewId, {
+  //       rating: 5
+  //     });
+  //     expect(model.findByIdAndUpdate).toHaveBeenCalledWith(reviewId, {
+  //       rating: 5
+  //     }, {
+  //       new: true
+  //     });
+  //   });
 
-    it('should find the review by id and update', () => {
-      expect(service.update(reviewId, {})).resolves.toEqual(review).catch((err) => {
-        console.log(err);
-      });
-    });
-  });
+  //   it('should find the review by id and update', () => {
+  //     expect(service.update(reviewId, {})).resolves.toEqual(review).catch((err) => {
+  //       console.log(err);
+  //     });
+  //   });
+  // });
 
-  describe('remove', () => {
-    it('should call findByIdAndRemove method on the model', async () => {
-      await service.remove(reviewId);
-      expect(model.findByIdAndRemove).toHaveBeenCalled();
-    });
+  // describe('remove', () => {
+  //   it('should call findByIdAndRemove method on the model', async () => {
+  //     await service.remove(reviewId);
+  //     expect(model.findByIdAndRemove).toHaveBeenCalled();
+  //   });
 
-    it('should call findByIdAndRemove method on the model with review id', async () => {
-      await service.remove(reviewId);
-      expect(model.findByIdAndRemove).toHaveBeenCalledWith(reviewId);
-    });
-  });
+  //   it('should call findByIdAndRemove method on the model with review id', async () => {
+  //     await service.remove(reviewId);
+  //     expect(model.findByIdAndRemove).toHaveBeenCalledWith(reviewId);
+  //   });
+  // });
 });

@@ -32,6 +32,22 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: yashwanthjavvaji/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: yashwanthjavvaji/payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
     - image: yashwanthjavvaji/client
       context: client
       docker:

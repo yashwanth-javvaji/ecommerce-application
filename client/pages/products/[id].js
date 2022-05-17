@@ -1,5 +1,5 @@
-// React
-import { useEffect, useRef, useState } from "react";
+// ReactJS
+import { useEffect, useState } from "react";
 
 // NextJS
 import { useRouter } from 'next/router';
@@ -58,10 +58,10 @@ const Product = () => {
     }, [id]);
 
     if (hasError) {
-        return <p>Something went wrong</p>
+        return <Typography variant="body2" color="error">Something went wrong</Typography>;
     }
     if (isLoading) {
-        return <p>Loading...</p>
+        return <Typography variant="body2" color="text.secondary">Loading...</Typography>;
     }
     if (!product) {
         return <Typography color="text.secondary">Product does not exist</Typography>

@@ -15,9 +15,7 @@ import { Category, CategoryDocument } from './schemas/category.schema';
 
 @Injectable()
 export class CategoriesService {
-  constructor(
-    @InjectModel(Category.name) private readonly categoryModel: Model<CategoryDocument>
-  ) { }
+  constructor(@InjectModel(Category.name) private readonly categoryModel: Model<CategoryDocument>) { }
 
   async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
     const createdCategory = new this.categoryModel(createCategoryDto);
@@ -36,7 +34,7 @@ export class CategoriesService {
     return await this.categoryModel.findOne({ name }).exec();
   }
 
-  async update(id: ObjectId, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
+  async update(id: ObjectId, updateCategoryDto: Partial<UpdateCategoryDto>): Promise<Category> {
     return await this.categoryModel.findByIdAndUpdate(id, updateCategoryDto, { new: true }).exec();
   }
 

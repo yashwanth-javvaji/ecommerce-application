@@ -6,7 +6,6 @@ import axios from 'axios';
 import getAuthHeader from './auth-header';
 
 
-// constants
 const API_BASE_URL = '/api/products/';
 
 const calculateRating = (reviews) => {

@@ -1,7 +1,7 @@
-// React
+// ReactJS
 import { useEffect, useState } from "react";
 
-// Next
+// NextJS
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 
@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
+import Typography from '@mui/material/Typography';
 // Icons
 import CategoryIcon from '@mui/icons-material/Category';
 
@@ -86,10 +87,10 @@ const EditCategory = () => {
     }, [id]);
 
     if (hasError) {
-        return <p>Something went wrong</p>
+        return <Typography variant="body2" color="error">Something went wrong</Typography>;
     }
     if (isLoading) {
-        return <p>Loading...</p>
+        return <Typography variant="body2" color="text.secondary">Loading...</Typography>;
     }
     return (
         <>

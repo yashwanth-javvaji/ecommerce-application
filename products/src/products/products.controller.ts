@@ -1,5 +1,6 @@
 // NestJS
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Res, UseGuards } from '@nestjs/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 // Common
@@ -19,7 +20,6 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './schemas/product.schema';
 // Services
 import { ProductsService } from './products.service';
-import { EventPattern, Payload } from '@nestjs/microservices';
 
 
 export const storage = {
@@ -65,34 +65,34 @@ export class ProductsController {
   @hasRoles(Role.Admin)
   @UseGuards(RolesGuard)
   @Patch(':id')
-  async update(@Param('id') id: ObjectId, @Body() updateProductDto: UpdateProductDto): Promise<Product> {
+  async update(@Param('id') id: ObjectId, @Body() updateProductDto: Partial<UpdateProductDto>): Promise<Product> {
     return await this.productsService.update(id, updateProductDto);
   }
 
   @EventPattern('orderCreated')
-  async orderCreated(@Payload() order) {
-    order.items.forEach((product) => {
-      this.productsService.updateStock(product.id, -product.quantity);
+  orderCreated(@Payload() order) {
+    order.items.forEach(async (product) => {
+      await this.productsService.updateStock(product.id, -product.quantity);
     });
   }
   
-  @EventPattern('orderCancelled')
-  async orderCancelled(@Payload() order) {
-    order.items.forEach((product) => {
-      this.productsService.updateStock(product.id, product.quantity);
+  @EventPattern('orderCanceled')
+  orderCanceled(@Payload() order) {
+    order.items.forEach(async (product) => {
+      await this.productsService.updateStock(product.id, product.quantity);
     });
   }
 
   @Patch(':id/reviews')
   async addReview(@Param('id') id: ObjectId, @Body('reviewId') reviewId): Promise<Product> {
-    return this.productsService.addReview(id, reviewId);
+    return await this.productsService.addReview(id, reviewId);
   }
 
   @hasRoles(Role.Admin)
   @UseGuards(RolesGuard)
   @Delete(':id')
-  remove(@Param('id') id: ObjectId) {
-    return this.productsService.remove(id);
+  async remove(@Param('id') id: ObjectId) {
+    return await this.productsService.remove(id);
   }
 
   @hasRoles(Role.Admin)

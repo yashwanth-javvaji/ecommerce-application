@@ -4,6 +4,7 @@
     "@next/next/link-passhref": "off",
     "jsx-a11y/alt-text": "off",
     "react/jsx-key": "off",
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/rules-of-hooks": "off"
   }
 }

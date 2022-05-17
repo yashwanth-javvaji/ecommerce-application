@@ -8,7 +8,7 @@ import { DeliveryStatus, OrderStatus, PaymentStatus } from '@yj-major-project/co
 import mongoose from "mongoose";
 
 
-export type OrderDocument = Order & Document;
+export type OrderDocument = Order & mongoose.Document;
 
 @Schema({
     timestamps: true,
@@ -21,6 +21,8 @@ export type OrderDocument = Order & Document;
     }
 })
 export class Order {
+    _id: mongoose.ObjectId;
+
     @Prop({
         type: String,
         required: true,
@@ -67,6 +69,12 @@ export class Order {
         required: true
     })
     shippingAddress: Object;
+
+    @Prop({
+        type: Date,
+        required: true
+    })
+    expiresAt: Date;
 
     @Prop({
         type: mongoose.Schema.Types.ObjectId,

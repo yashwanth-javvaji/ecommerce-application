@@ -1,4 +1,4 @@
-// React
+// ReactJS
 import { useEffect, useState } from "react";
 
 // NextJS
@@ -12,17 +12,17 @@ import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from "@mui/material/MenuItem";
 import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Rating from '@mui/material/Rating';
+import Select from "@mui/material/Select";
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 
 // Other Dependencies
 import { motion } from 'framer-motion';
@@ -91,10 +91,10 @@ const ProductsDashboard = () => {
     }, [router.query.category]);
 
     if (hasError) {
-        return <p>Something went wrong</p>
+        return <Typography variant="body2" color="error">Something went wrong</Typography>;
     }
     if (isLoading) {
-        return <p>Loading...</p>
+        return <Typography variant="body2" color="text.secondary">Loading...</Typography>;
     }
     return (
         <>

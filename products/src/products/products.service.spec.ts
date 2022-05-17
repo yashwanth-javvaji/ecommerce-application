@@ -6,8 +6,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import mongoose from 'mongoose';
 
 // Custom
-// DTOs
-import { UpdateProductDto } from './dto/update-product.dto';
 // Schemas
 import { ProductDocument } from './schemas/product.schema';
 // Services
@@ -192,23 +190,23 @@ describe('ProductsService', () => {
     it('should call findByIdAndUpdate method on the model', async () => {
       await service.update(productId, {
         name: "test"
-      } as UpdateProductDto);
+      });
       expect(model.findByIdAndUpdate).toHaveBeenCalled();
     });
 
     it('should call findByIdAndUpdate method on the model with product id and update product dto', async () => {
       await service.update(productId, {
         name: "test"
-      } as UpdateProductDto);
+      });
       expect(model.findByIdAndUpdate).toHaveBeenCalledWith(productId, {
         name: "test"
-      } as UpdateProductDto, {
+      }, {
         new: true
       });
     });
 
     it('should find the product by id and update', () => {
-      expect(service.update(productId, {} as UpdateProductDto)).resolves.toEqual(product).catch((err) => {
+      expect(service.update(productId, {})).resolves.toEqual(product).catch((err) => {
         console.log(err);
       });
     });

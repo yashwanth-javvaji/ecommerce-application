@@ -6,8 +6,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import mongoose from 'mongoose';
 
 // Custom
-// DTOs
-import { UpdateUserDto } from './dto/update-user.dto';
 // Schemas
 import { UserDocument } from './schemas/user.schema';
 // Services
@@ -116,38 +114,25 @@ describe('UsersService', () => {
 
   describe('update', () => {
     it('should call findByIdAndUpdate method on the model', async () => {
-      await service.update(
-        userId,
-        {
-          firstname: "test"
-        } as UpdateUserDto
-      );
+      await service.update(userId, {
+        firstname: "test"
+      });
       expect(model.findByIdAndUpdate).toHaveBeenCalled();
     });
 
     it('should call findByIdAndUpdate method on the model with user id and update user dto', async () => {
-      await service.update(
-        userId,
-        {
-          firstname: "test"
-        } as UpdateUserDto
-      );
-      expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
-        userId,
-        {
-          firstname: "test"
-        } as UpdateUserDto,
-        {
-          new: true
-        }
-      );
+      await service.update(userId, {
+        firstname: "test"
+      });
+      expect(model.findByIdAndUpdate).toHaveBeenCalledWith(userId, {
+        firstname: "test"
+      }, {
+        new: true
+      });
     });
 
     it('should find the user by id and update', () => {
-      expect(service.update(
-        userId,
-        {} as UpdateUserDto
-      )).resolves.toEqual(user).catch((err) => {
+      expect(service.update(userId, {})).resolves.toEqual(user).catch((err) => {
         console.log(err);
       });
     });

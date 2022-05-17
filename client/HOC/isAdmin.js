@@ -1,4 +1,4 @@
-// React
+// ReactJS
 import { useEffect, useState } from "react";
 
 // NextJS
@@ -53,7 +53,7 @@ const isAdmin = (WrappedComponent) => {
             return <Typography variant="body2" color="error">Something went wrong</Typography>;
         }
         if (isLoading) {
-            return <p>Loading...</p>;
+            return <Typography variant="body2" color="text.secondary">Loading...</Typography>;
         }
         if (verified) {
             return <WrappedComponent {...props} />;

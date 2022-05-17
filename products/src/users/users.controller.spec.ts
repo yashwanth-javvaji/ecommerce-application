@@ -8,8 +8,6 @@ import mongoose from 'mongoose';
 // Custom
 // Controllers
 import { UsersController } from './users.controller';
-// DTOs
-import { UpdateUserDto } from './dto/update-user.dto';
 // Services
 import { UsersService } from './users.service';
 
@@ -100,7 +98,7 @@ describe('UsersController', () => {
       await controller.update({
         id: userId,
         firstname: "test"
-      } as UpdateUserDto);
+      });
       expect(service.update).toHaveBeenCalled();
     });
 
@@ -108,7 +106,7 @@ describe('UsersController', () => {
       await controller.update({
         id: userId,
         firstname: "test"
-      } as UpdateUserDto);
+      });
       expect(service.update).toHaveBeenCalledWith(userId, {
         id: userId,
         firstname: "test"

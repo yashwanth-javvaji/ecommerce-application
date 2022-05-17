@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: client-depl
+  name: client-deployment
 spec:
   replicas: 1
   selector:
@@ -13,21 +13,18 @@ spec:
         app: client
     spec:
       containers:
-        - name: client
-          image: yashwanthjavvaji/client
-
+      - name: client
+        image: yashwanthjavvaji/client
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: client-srv
+  name: client-service
 spec:
   selector:
     app: client
   ports:
-    - name: client
-      protocol: TCP
-      port: 3000
-      targetPort: 3000
-      
+  - name: client
+    protocol: TCP
+    port: 3000
+    targetPort: 3000 

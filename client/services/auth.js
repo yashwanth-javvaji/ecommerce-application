@@ -3,10 +3,10 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 // Custom
+// Services
 import getAuthHeader from './auth-header';
 
 
-// constants
 const API_BASE_URL = '/api/auth/';
 
 // POST

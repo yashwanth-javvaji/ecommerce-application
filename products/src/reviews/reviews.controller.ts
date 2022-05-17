@@ -29,18 +29,19 @@ export class ReviewsController {
     return await this.reviewsService.findAll();
   }
 
+  @Public()
   @Get(':id')
   async findById(@Param('id') id): Promise<Review> {
     return await this.reviewsService.findById(id);
   }
 
-  @Patch(':id')
-  async update(@Param('id') id, @Body() updateReviewDto: UpdateReviewDto): Promise<Review> {
-    return await this.reviewsService.update(id, updateReviewDto);
-  }
+  // @Patch(':id')
+  // async update(@Param('id') id, @Body() updateReviewDto: UpdateReviewDto): Promise<Review> {
+  //   return await this.reviewsService.update(id, updateReviewDto);
+  // }
 
-  @Delete(':id')
-  async remove(@Param('id') id) {
-    return await this.reviewsService.remove(id);
-  }
+  // @Delete(':id')
+  // async remove(@Param('id') id) {
+  //   return await this.reviewsService.remove(id);
+  // }
 }

@@ -16,11 +16,11 @@ import { UsersService } from './users.service';
   imports: [
     ClientsModule.register([
       {
-        name: 'USERS_SERVICE',
+        name: 'AUTH_PRODUCTS_SERVICE',
         transport: Transport.RMQ,
         options: {
           urls: ['amqps://wjdovbpn:boXVmPjKWIlMJ0xaTBqm_5jBgA36EuSg@lionfish.rmq.cloudamqp.com/wjdovbpn'],
-          queue: 'users_queue',
+          queue: 'auth_products_queue',
           queueOptions: {
             durable: false
           }

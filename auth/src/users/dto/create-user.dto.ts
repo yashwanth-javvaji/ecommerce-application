@@ -6,20 +6,20 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(3)
-  readonly firstname: string;
+  firstname: string;
 
   @IsNotEmpty()
   @IsString()
   @MinLength(3)
-  readonly lastname: string;
+  lastname: string;
 
   @IsNotEmpty()
   @IsString()
   @IsEmail()
-  readonly email: string;
+  email: string;
 
   @IsNotEmpty()
   @IsString()
   @MinLength(8)
-  readonly password: string;
+  password: string;
 }

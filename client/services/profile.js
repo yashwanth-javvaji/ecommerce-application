@@ -3,10 +3,10 @@ import axios from 'axios';
 import { getCurrentUser } from './auth';
 
 // Custom
+// Services
 import getAuthHeader from './auth-header';
 
 
-// constants
 const API_BASE_URL = '/api/users/';
 
 // POST (User)

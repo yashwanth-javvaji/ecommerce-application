@@ -1,4 +1,4 @@
-// React
+// ReactJS
 import { useEffect } from 'react';
 
 // NextJS
@@ -62,7 +62,7 @@ const App = ({ Component, pageProps }) => {
       </ThemeProvider>
     </>
   );
-}
+};
 
 App.propTypes = {
   Component: PropTypes.elementType.isRequired,

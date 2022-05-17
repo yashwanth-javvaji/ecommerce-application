@@ -21,7 +21,7 @@ import { User, UserDocument } from './schemas/user.schema';
 export class UsersService implements OnModuleInit {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    @Inject('USERS_SERVICE') private readonly client: ClientProxy
+    @Inject('AUTH_PRODUCTS_SERVICE') private readonly client: ClientProxy
   ) { }
 
   async onModuleInit() {
@@ -58,8 +58,8 @@ export class UsersService implements OnModuleInit {
     const updatedUser = await this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
     if (!!updatedUser) {
       this.client.emit('userUpdated', updatedUser);
-      return updatedUser;
     }
+    return updatedUser;
   }
 
   async remove(id: ObjectId) {

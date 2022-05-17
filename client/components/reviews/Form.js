@@ -1,4 +1,4 @@
-// React
+// ReactJS
 import { useState } from "react";
 
 // NextJS

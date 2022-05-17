@@ -8,8 +8,6 @@ import mongoose from 'mongoose';
 // Custom
 // Controllers
 import { ProductsController } from './products.controller';
-// DTOs
-import { UpdateProductDto } from './dto/update-product.dto';
 // Services
 import { ProductsService } from './products.service';
 
@@ -202,21 +200,21 @@ describe('ProductsController', () => {
     it('should call update method on the service', async () => {
       await controller.update(productId, {
         name: "test"
-      } as UpdateProductDto);
+      });
       expect(service.update).toHaveBeenCalled();
     });
 
     it('should call update method on the service with product id and update product dto', async () => {
       await controller.update(productId, {
         name: "test"
-      } as UpdateProductDto);
+      });
       expect(service.update).toHaveBeenCalledWith(productId, {
         name: "test"
       });
     });
 
     it('should find the product by id and update', () => {
-      expect(controller.update(productId, {} as UpdateProductDto)).resolves.toEqual(product).catch((err) => {
+      expect(controller.update(productId, {})).resolves.toEqual(product).catch((err) => {
         console.log(err);
       });
     });

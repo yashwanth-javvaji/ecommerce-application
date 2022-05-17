@@ -1,7 +1,7 @@
-// React
+// ReactJS
 import { useEffect, useState } from "react";
 
-// Next
+// NextJS
 import Head from 'next/head';
 import Link from "next/link";
 import Router from 'next/router';
@@ -10,6 +10,7 @@ import Router from 'next/router';
 // Components
 import Grid from "@mui/material/Grid";
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 // Data Grid
 import { DataGrid } from '@mui/x-data-grid';
 // Icons
@@ -68,35 +69,35 @@ const CategoriesDashboard = () => {
     }, []);
 
     if (hasError) {
-        return <p>Something went wrong</p>
+        return <Typography variant="body2" color="error">Something went wrong</Typography>;
     }
     if (isLoading) {
-        return <p>Loading...</p>
+        return <Typography variant="body2" color="text.secondary">Loading...</Typography>;
     }
     return (
         <>
-        <Head>
-        <title>SKY | Admin - Categories</title>
-      </Head>
-        <Grid container spacing={2}>
-            <ComponentHeader
-                icon={CategoryIcon}
-                title="Categories"
-                href="/admin/categories/add"
-                linkText="Add Category"
-            />
-            <Grid item xs={12}>
-                <DataGrid
-                    rows={categories}
-                    columns={columns}
-                    pageSize={pageSize}
-                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                    rowsPerPageOptions={[5, 10, 20]}
-                    autoHeight
-                    disableSelectionOnClick
+            <Head>
+                <title>SKY | Admin - Categories</title>
+            </Head>
+            <Grid container spacing={2}>
+                <ComponentHeader
+                    icon={CategoryIcon}
+                    title="Categories"
+                    href="/admin/categories/add"
+                    linkText="Add Category"
                 />
+                <Grid item xs={12}>
+                    <DataGrid
+                        rows={categories}
+                        columns={columns}
+                        pageSize={pageSize}
+                        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                        rowsPerPageOptions={[5, 10, 20]}
+                        autoHeight
+                        disableSelectionOnClick
+                    />
+                </Grid>
             </Grid>
-        </Grid>
         </>
     );
 };

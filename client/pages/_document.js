@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-filename-extension */
-// React
+// ReactJS
 import React from 'react';
 
 // NextJS

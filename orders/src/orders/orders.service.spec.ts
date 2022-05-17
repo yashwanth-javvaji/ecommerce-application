@@ -1,4 +1,6 @@
 // NestJS
+import { BadRequestException } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 
@@ -9,8 +11,6 @@ import { OrderStatus } from '@yj-major-project/common';
 import mongoose from 'mongoose';
 
 // Custom
-// DTOs
-import { UpdateOrderDto } from './dto/update-order.dto';
 // Schemas
 import { OrderDocument } from './schemas/order.schema';
 // Services
@@ -18,9 +18,9 @@ import { OrdersService } from './orders.service';
 
 
 const order = {
-  "orderStatus": "open",
-  "paymentStatus": "unpaid",
-  "deliveryStatus": "queue",
+  "orderStatus": "completed",
+  "paymentStatus": "paid",
+  "deliveryStatus": "delivered",
   "items": [
     {
       "name": "Mac",
@@ -49,9 +49,10 @@ const order = {
     "zip": "500062",
     "country": "India"
   },
+  "expiresAt": new Date(new Date().getTime() + (5 * 60 * 1000)),
   "userId": "625b086e0df0e5916a15b0ad",
   "createdAt": "2022-04-16T19:02:35.503Z",
-  "updatedAt": "2022-04-16T19:02:35.503Z",
+  "updatedAt": "2022-04-17T19:02:35.503Z",
   "id": "625b12cb391f05b6847691c2"
 };
 
@@ -65,12 +66,20 @@ class OrderModel {
   static findByIdAndRemove = jest.fn().mockResolvedValue(true);
 }
 
+class Client {
+  static emit = jest.fn().mockResolvedValue(true);
+}
+
 describe('OrdersService', () => {
   const orderId: mongoose.Schema.Types.ObjectId = new mongoose.Types.ObjectId(order.id) as unknown as mongoose.Schema.Types.ObjectId;
   const userId: mongoose.Schema.Types.ObjectId = new mongoose.Types.ObjectId(order.userId) as unknown as mongoose.Schema.Types.ObjectId;
 
   let service: OrdersService;
   let model: mongoose.Model<OrderDocument>;
+  let productsClient: ClientProxy;
+  let expirationClient: ClientProxy;
+  let paymentsClient: ClientProxy;
+
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -79,12 +88,27 @@ describe('OrdersService', () => {
         {
           provide: getModelToken('Order'),
           useValue: OrderModel
+        },
+        {
+          provide: 'ORDERS_PRODUCTS_SERVICE',
+          useValue: Client
+        },
+        {
+          provide: 'ORDERS_EXPIRATION_SERVICE',
+          useValue: Client
+        },
+        {
+          provide: 'ORDERS_PAYMENTS_SERVICE',
+          useValue: Client
         }
       ],
     }).compile();
 
     service = module.get<OrdersService>(OrdersService);
     model = module.get<mongoose.Model<OrderDocument>>(getModelToken('Order'));
+    productsClient = module.get<ClientProxy>('ORDERS_PRODUCTS_SERVICE');
+    expirationClient = module.get<ClientProxy>('ORDERS_EXPIRATION_SERVICE');
+    paymentsClient = module.get<ClientProxy>('ORDERS_PAYMENTS_SERVICE');
   });
 
   afterEach(() => {
@@ -94,21 +118,33 @@ describe('OrdersService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
     expect(model).toBeDefined();
+    expect(productsClient).toBeDefined();
+    expect(expirationClient).toBeDefined();
+    expect(paymentsClient).toBeDefined();
   });
 
   describe('create', () => {
+    it('should call emit method on the clients', async () => {
+      await service.create(userId, {
+        items: order.items.map((item) => ({ ...item, id: new mongoose.Types.ObjectId(item.id) as unknown as mongoose.Schema.Types.ObjectId })),
+        shippingAddress: order.shippingAddress,
+        total: order.total
+      });
+      expect(productsClient.emit).toHaveBeenCalled();
+      expect(expirationClient.emit).toHaveBeenCalled();
+      expect(paymentsClient.emit).toHaveBeenCalled();
+    });
+
     it('should create a new order and save it', () => {
-      expect(service.create(
-        userId,
-        {
-          items: order.items.map((item) => ({ ...item, id: new mongoose.Types.ObjectId(item.id) as unknown as mongoose.Schema.Types.ObjectId })),
-          shippingAddress: order.shippingAddress,
-          total: order.total
-        }
-      )).resolves.toEqual({
+      expect(service.create(userId, {
+        items: order.items.map((item) => ({ ...item, id: new mongoose.Types.ObjectId(item.id) as unknown as mongoose.Schema.Types.ObjectId })),
+        shippingAddress: order.shippingAddress,
+        total: order.total
+      })).resolves.toEqual({
         items: order.items.map((item) => ({ ...item, id: new mongoose.Types.ObjectId(item.id) as unknown as mongoose.Schema.Types.ObjectId })),
         shippingAddress: order.shippingAddress,
         total: order.total,
+        expiresAt: expect.any(Object),
         userId
       }).catch((err) => {
         console.log(err);
@@ -190,38 +226,51 @@ describe('OrdersService', () => {
 
   describe('update', () => {
     it('should call findByIdAndUpdate method on the model', async () => {
-      await service.update(
-        orderId,
-        {
-          orderStatus: OrderStatus.Confirmed
-        } as UpdateOrderDto
-      );
+      await service.update(orderId, {
+        orderStatus: OrderStatus.Canceled
+      });
       expect(model.findByIdAndUpdate).toHaveBeenCalled();
     });
 
     it('should call findByIdAndUpdate method on the model with order id and update order dto', async () => {
-      await service.update(
-        orderId,
-        {
-          orderStatus: OrderStatus.Confirmed
-        } as UpdateOrderDto
-      );
-      expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
-        orderId,
-        {
-          orderStatus: OrderStatus.Confirmed
-        } as UpdateOrderDto,
-        {
-          new: true
-        }
-      );
+      await service.update(orderId, {
+        orderStatus: OrderStatus.Canceled
+      });
+      expect(model.findByIdAndUpdate).toHaveBeenCalledWith(orderId, {
+        orderStatus: OrderStatus.Canceled
+      }, {
+        new: true
+      });
+    });
+
+    it('should throw an exception if updating order status from completed to canceled', () => {
+      model.findById = jest.fn().mockResolvedValue(order);
+      expect(service.update(orderId, {
+        orderStatus: OrderStatus.Canceled
+      })).rejects.toThrow(new BadRequestException());
+    });
+
+    it('should call emit method on the clients if updated order status is canceled', async () => {
+      model.findById = jest.fn().mockResolvedValue({
+        ...order,
+        orderStatus: OrderStatus.Confirmed
+      });
+      model.findByIdAndUpdate = jest.fn().mockImplementation(() => ({
+        exec: jest.fn().mockResolvedValue({
+          ...order,
+          orderStatus: OrderStatus.Canceled
+        })
+      }));
+      await service.update(orderId, {
+        orderStatus: OrderStatus.Canceled
+      });
+      expect(productsClient.emit).toHaveBeenCalled();
+      expect(paymentsClient.emit).toHaveBeenCalled();
     });
 
     it('should find the order by id and update', () => {
-      expect(service.update(
-        orderId,
-        {} as UpdateOrderDto
-      )).resolves.toEqual(order).catch((err) => {
+      model.findByIdAndUpdate = jest.fn().mockImplementation(() => ({ exec: jest.fn().mockResolvedValue(order) }));
+      expect(service.update(orderId, {})).resolves.toEqual(order).catch((err) => {
         console.log(err);
       });
     });

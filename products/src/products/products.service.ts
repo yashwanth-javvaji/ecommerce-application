@@ -15,10 +15,7 @@ import { Product, ProductDocument } from './schemas/product.schema';
 
 @Injectable()
 export class ProductsService {
-  constructor(
-    @InjectModel(Product.name)
-    private readonly productModel: Model<ProductDocument>
-  ) { }
+  constructor(@InjectModel(Product.name) private readonly productModel: Model<ProductDocument>) { }
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const createdProduct = new this.productModel(createProductDto);
@@ -56,7 +53,7 @@ export class ProductsService {
     }).exec();
   }
 
-  async update(id: ObjectId, updateProductDto: UpdateProductDto): Promise<Product> {
+  async update(id: ObjectId, updateProductDto: Partial<UpdateProductDto>): Promise<Product> {
     return await this.productModel.findByIdAndUpdate(id, updateProductDto, { new: true }).populate('category').populate({
       path: 'reviews',
       populate: {

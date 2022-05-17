@@ -6,7 +6,6 @@ import axios from 'axios';
 import getAuthHeader from './auth-header';
 
 
-// contants
 const API_BASE_URL = '/api/reviews/';
 
 // POST (User)

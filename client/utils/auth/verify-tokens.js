@@ -10,7 +10,7 @@ const verify = async (token) => {
     if (!token) {
         return false;
     } else {
-        // call the api that verifies the token.
+        // call to the api that verifies the token.
         const res = await verifyToken(token);
         return res.status === 201;
     };

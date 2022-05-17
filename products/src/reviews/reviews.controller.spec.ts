@@ -138,39 +138,39 @@ describe('ReviewsController', () => {
     });
   });
 
-  describe('update', () => {
-    it('should call update method on the service', async () => {
-      await controller.update(reviewId, {
-        rating: 5
-      });
-      expect(service.update).toHaveBeenCalled();
-    });
+  // describe('update', () => {
+  //   it('should call update method on the service', async () => {
+  //     await controller.update(reviewId, {
+  //       rating: 5
+  //     });
+  //     expect(service.update).toHaveBeenCalled();
+  //   });
 
-    it('should call update method on the service with review id and update review dto', async () => {
-      await controller.update(reviewId, {
-        rating: 5
-      });
-      expect(service.update).toHaveBeenCalledWith(reviewId, {
-        rating: 5
-      });
-    });
+  //   it('should call update method on the service with review id and update review dto', async () => {
+  //     await controller.update(reviewId, {
+  //       rating: 5
+  //     });
+  //     expect(service.update).toHaveBeenCalledWith(reviewId, {
+  //       rating: 5
+  //     });
+  //   });
 
-    it('should find the review by id and update', () => {
-      expect(controller.update(reviewId, {})).resolves.toEqual(review).catch((err) => {
-        console.log(err);
-      });
-    });
-  });
+  //   it('should find the review by id and update', () => {
+  //     expect(controller.update(reviewId, {})).resolves.toEqual(review).catch((err) => {
+  //       console.log(err);
+  //     });
+  //   });
+  // });
 
-  describe('remove', () => {
-    it('should call remove method on the service', async () => {
-      await controller.remove(reviewId);
-      expect(service.remove).toHaveBeenCalled();
-    });
+  // describe('remove', () => {
+  //   it('should call remove method on the service', async () => {
+  //     await controller.remove(reviewId);
+  //     expect(service.remove).toHaveBeenCalled();
+  //   });
 
-    it('should call remove method on the service with review id', async () => {
-      await controller.remove(reviewId);
-      expect(service.remove).toHaveBeenCalledWith(reviewId);
-    });
-  });
+  //   it('should call remove method on the service with review id', async () => {
+  //     await controller.remove(reviewId);
+  //     expect(service.remove).toHaveBeenCalledWith(reviewId);
+  //   });
+  // });
 });

@@ -1,4 +1,4 @@
-// React
+// ReactJS
 import { useState } from 'react';
 
 // NextJS
@@ -187,6 +187,6 @@ const SignIn = () => {
       </Grid>
     </>
   );
-}
+};
 
 export default SignIn;

@@ -24,14 +24,13 @@ import { UsersService } from '../users/users.service';
 @Injectable()
 export class AuthService {
     constructor(
-        private usersService: UsersService,
-        private jwtService: JwtService
+        private readonly usersService: UsersService,
+        private readonly jwtService: JwtService
     ) { }
 
     private async createAccessToken(jwtPayloadDto: JwtPayloadDto): Promise<string> {
         return await this.jwtService.signAsync(jwtPayloadDto, {
             secret: process.env.JWT_ACCESS_TOKEN_SECRET,
-            // @ts-ignore
             expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME
         });
     }
@@ -39,7 +38,6 @@ export class AuthService {
     private async createRefreshToken(jwtPayloadDto: JwtPayloadDto): Promise<string> {
         return await this.jwtService.signAsync(jwtPayloadDto, {
             secret: process.env.JWT_REFRESH_TOKEN_SECRET,
-            // @ts-ignore
             expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME
         });
     }

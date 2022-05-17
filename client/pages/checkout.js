@@ -1,8 +1,9 @@
-// React
-import { useState } from 'react';
+// ReactJS
+import { useEffect, useState } from 'react';
 
 // NextJS
 import Head from 'next/head';
+import Router from 'next/router';
 
 // Material UI
 // Components
@@ -33,7 +34,7 @@ import { numberToCurrency } from '../utils/products/formatter';
 const steps = ['Details', 'Review'];
 
 const Checkout = () => {
-    const { emptyCart, items } = useCart();
+    const { items } = useCart();
 
     const total = items.reduce((accumulator, item) => {
         const { itemTotal, discount } = item;
@@ -70,12 +71,10 @@ const Checkout = () => {
                         shippingAddress,
                         total
                     },
-                    onSuccess: (order) => {
+                    onSuccess: async (order) => {
                         setOrder(order);
-                        emptyCart();
                     }
                 });
-                setActiveStep(activeStep + 1);
                 break;
         }
     };
@@ -125,6 +124,12 @@ const Checkout = () => {
         });
         validate(event.target);
     };
+
+    useEffect(() => {
+        if (!!order) {
+            Router.push(`/orders/${order.id}`);
+        }
+    }, [order]);
 
     if ((!order) && (items.length === 0)) {
         return (
@@ -298,31 +303,20 @@ const Checkout = () => {
                                 </Grid>
                             </Grid>
                         )}
-                        {(activeStep === 2) ? (
-                            <>
-                                <Typography variant="h4">
-                                    Thank you for your order.
-                                </Typography>
-                                <Typography variant="subtitle1">
-                                    Your order number is {order.id}
-                                </Typography>
-                            </>
-                        ) : (
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                {activeStep !== 0 && (
-                                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                                        Back
-                                    </Button>
-                                )}
-                                <Button
-                                    variant="contained"
-                                    onClick={handleNext}
-                                    sx={{ mt: 3, ml: 1 }}
-                                >
-                                    {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            {activeStep !== 0 && (
+                                <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                                    Back
                                 </Button>
-                            </Box>
-                        )}
+                            )}
+                            <Button
+                                variant="contained"
+                                onClick={handleNext}
+                                sx={{ mt: 3, ml: 1 }}
+                            >
+                                {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                            </Button>
+                        </Box>
                     </Paper>
                 </Grid>
             </Grid>

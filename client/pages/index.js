@@ -1,4 +1,4 @@
-// React
+// ReactJS
 import { useEffect, useState } from 'react';
 
 // NextJS
@@ -8,6 +8,7 @@ import Head from 'next/head';
 // Components
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 // Icons
 import CategoryIcon from '@mui/icons-material/Category';
 import DiscountIcon from '@mui/icons-material/Discount';
@@ -47,10 +48,10 @@ const Home = () => {
   }, []);
 
   if (hasError) {
-    return <p>Something went wrong</p>
+    return <Typography variant="body2" color="error">Something went wrong</Typography>;
   }
   if (isLoading) {
-    return <p>Loading...</p>
+    return <Typography variant="body2" color="text.secondary">Loading...</Typography>;
   }
   return (
     <>

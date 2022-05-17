@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: products-depl
+  name: products-deployment
 spec:
   replicas: 1
   selector:
@@ -17,44 +17,22 @@ spec:
           image: yashwanthjavvaji/products
           env:
             - name: MONGO_URI
-              value: 'mongodb://products-mongo-srv:27017/products'
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: JWT_SECRET
-            - name: JWT_EXPIRATION_TIME
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-expiration-time
-                  key: JWT_EXPIRATION_TIME
+              value: 'mongodb://products-mongo-service:27017/products'
             - name: JWT_ACCESS_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
                   name: jwt-access-token-secret
                   key: JWT_ACCESS_TOKEN_SECRET
-            - name: JWT_ACCESS_TOKEN_EXPIRATION_TIME
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-access-token-expiration-time
-                  key: JWT_ACCESS_TOKEN_EXPIRATION_TIME
             - name: JWT_REFRESH_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
                   name: jwt-refresh-token-secret
                   key: JWT_REFRESH_TOKEN_SECRET
-            - name: JWT_REFRESH_TOKEN_EXPIRATION_TIME
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-refresh-token-expiration-time
-                  key: JWT_REFRESH_TOKEN_EXPIRATION_TIME
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: products-srv
+  name: products-service
 spec:
   selector:
     app: products

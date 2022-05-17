@@ -29,7 +29,7 @@
     "@nestjs/mongoose": "^9.0.3",
     "@nestjs/passport": "^8.2.1",
     "@nestjs/platform-express": "^8.4.1",
-    "@yj-major-project/common": "^1.0.29",
+    "@yj-major-project/common": "^1.0.32",
     "amqp-connection-manager": "^4.1.1",
     "amqplib": "^0.8.0",
     "bcrypt": "^5.0.1",

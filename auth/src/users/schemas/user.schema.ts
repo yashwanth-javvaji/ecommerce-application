@@ -6,7 +6,7 @@ import { Role } from "@yj-major-project/common";
 
 // Other Dependencies
 import * as bcrypt from 'bcrypt';
-import { ObjectId } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 
 
 export type UserDocument = User & Document;

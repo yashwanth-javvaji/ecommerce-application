@@ -8,8 +8,6 @@ import mongoose from 'mongoose';
 // Custom
 // Controllers
 import { UsersController } from './users.controller';
-// DTOs
-import { UpdateUserDto } from './dto/update-user.dto';
 // Services
 import { UsersService } from './users.service';
 
@@ -143,21 +141,21 @@ describe('UsersController', () => {
     it('should call update method on the service', async () => {
       await controller.update(userId, {
         firstname: "firstname"
-      } as UpdateUserDto);
+      });
       expect(service.update).toHaveBeenCalled();
     });
 
     it('should call update method on the service with user id and update user dto', async () => {
       await controller.update(userId, {
         firstname: "firstname"
-      } as UpdateUserDto);
+      });
       expect(service.update).toHaveBeenCalledWith(userId, {
         firstname: "firstname"
       });
     });
 
     it('should find the user by id and update', () => {
-      expect(controller.update(userId, {} as UpdateUserDto)).resolves.toEqual(user).catch((err) => {
+      expect(controller.update(userId, {})).resolves.toEqual(user).catch((err) => {
         console.log(err);
       });
     });

@@ -15,10 +15,7 @@ import { Review, ReviewDocument } from './schemas/review.schema';
 
 @Injectable()
 export class ReviewsService {
-  constructor(
-    @InjectModel(Review.name)
-    private readonly reviewModel: Model<ReviewDocument>
-  ) { }
+  constructor(@InjectModel(Review.name) private readonly reviewModel: Model<ReviewDocument>) { }
 
   async create(createReviewDto: CreateReviewDto): Promise<Review> {
     const createdReview = new this.reviewModel(createReviewDto);
@@ -33,11 +30,11 @@ export class ReviewsService {
     return await this.reviewModel.findById(id).populate('user').exec();
   }
 
-  async update(id, updateReviewDto: UpdateReviewDto): Promise<Review> {
-    return await this.reviewModel.findByIdAndUpdate(id, updateReviewDto, { new: true }).populate('user').exec();
-  }
+  // async update(id, updateReviewDto: UpdateReviewDto): Promise<Review> {
+  //   return await this.reviewModel.findByIdAndUpdate(id, updateReviewDto, { new: true }).populate('user').exec();
+  // }
 
-  async remove(id) {
-    await this.reviewModel.findByIdAndRemove(id);
-  }
+  // async remove(id) {
+  //   await this.reviewModel.findByIdAndRemove(id);
+  // }
 }

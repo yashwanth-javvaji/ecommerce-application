@@ -10,7 +10,7 @@ import mongoose from "mongoose";
 import { User } from "../../users/schemas/user.schema";
 
 
-export type ReviewDocument = Review & Document;
+export type ReviewDocument = Review & mongoose.Document;
 
 @Schema({
   timestamps: true,

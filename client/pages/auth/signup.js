@@ -1,4 +1,4 @@
-// React
+// ReactJS
 import { useEffect, useState } from 'react';
 
 // NextJS
@@ -286,6 +286,6 @@ const SignUp = () => {
       </Grid>
     </>
   );
-}
+};
 
 export default SignUp;

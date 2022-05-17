@@ -1,4 +1,4 @@
-// React
+// ReactJS
 import { useEffect, useState } from 'react';
 
 // NextJS
@@ -30,7 +30,7 @@ import { numberToCurrency } from '../../utils/products/formatter';
 
 const Item = ({ item }) => {
     const { removeItem, updateItemQuantity } = useCart();
-    const { id, name, brand, price, quantity } = item;
+    const { id, name, brand, stock, price, quantity } = item;
     price *= 1 - (item.discount / 100);
 
     const [productImage, setProductImage] = useState();
@@ -66,8 +66,9 @@ const Item = ({ item }) => {
                     </Typography>
                     <Button
                         variant="contained"
-                        startIcon={<RemoveIcon onClick={() => updateItemQuantity(id, quantity - 1)} />}
-                        endIcon={<AddIcon onClick={() => updateItemQuantity(id, quantity + 1)} />}
+                        color={(stock === item.quantity) ? 'error' : 'primary'}
+                        startIcon={<RemoveIcon onClick={() => updateItemQuantity(item.id, item.quantity - 1)} />}
+                        endIcon={<AddIcon onClick={() => (stock > item.quantity) && updateItemQuantity(item.id, item.quantity + 1)} />}
                     >
                         {quantity}
                     </Button>

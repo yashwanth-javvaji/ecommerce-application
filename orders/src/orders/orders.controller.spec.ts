@@ -12,8 +12,6 @@ const httpMocks = require('node-mocks-http');
 // Custom
 // Controllers
 import { OrdersController } from './orders.controller';
-// DTOs
-import { UpdateOrderDto } from './dto/update-order.dto';
 // Services
 import { OrdersService } from './orders.service';
 
@@ -50,6 +48,7 @@ const order = {
     "zip": "500062",
     "country": "India"
   },
+  "expiresAt": new Date(new Date().getTime() + (5 * 60 * 1000)),
   "userId": "625b086e0df0e5916a15b0ad",
   "createdAt": "2022-04-16T19:02:35.503Z",
   "updatedAt": "2022-04-16T19:02:35.503Z",
@@ -208,32 +207,23 @@ describe('OrdersController', () => {
 
   describe('update', () => {
     it('should call update method on the service', async () => {
-      await controller.update(
-        orderId,
-        {
-          orderStatus: OrderStatus.Confirmed
-        } as UpdateOrderDto
-      );
+      await controller.update(orderId, {
+        orderStatus: OrderStatus.Confirmed
+      });
       expect(service.update).toHaveBeenCalled();
     });
 
     it('should call update method on the service with order id and update order dto', async () => {
-      await controller.update(
-        orderId,
-        {
-          orderStatus: OrderStatus.Confirmed
-        } as UpdateOrderDto
-      );
+      await controller.update(orderId, {
+        orderStatus: OrderStatus.Confirmed
+      });
       expect(service.update).toHaveBeenCalledWith(orderId, {
         orderStatus: OrderStatus.Confirmed
       });
     });
 
     it('should find the order by id and update', () => {
-      expect(controller.update(
-        orderId,
-        {} as UpdateOrderDto
-      )).resolves.toEqual(order).catch((err) => {
+      expect(controller.update(orderId, {})).resolves.toEqual(order).catch((err) => {
         console.log(err);
       });
     });

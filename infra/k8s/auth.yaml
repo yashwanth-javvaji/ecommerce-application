@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: auth-deployment
 spec:
   replicas: 1
   selector:
@@ -13,64 +13,152 @@ spec:
         app: auth
     spec:
       containers:
-        - name: auth
-          image: yashwanthjavvaji/auth
-          env:
-            - name: MONGO_URI
-              value: 'mongodb://auth-mongo-srv:27017/users'
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: JWT_SECRET
-            - name: JWT_EXPIRATION_TIME
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-expiration-time
-                  key: JWT_EXPIRATION_TIME
-            - name: JWT_ACCESS_TOKEN_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-access-token-secret
-                  key: JWT_ACCESS_TOKEN_SECRET
-            - name: JWT_ACCESS_TOKEN_EXPIRATION_TIME
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-access-token-expiration-time
-                  key: JWT_ACCESS_TOKEN_EXPIRATION_TIME
-            - name: JWT_REFRESH_TOKEN_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-refresh-token-secret
-                  key: JWT_REFRESH_TOKEN_SECRET
-            - name: JWT_REFRESH_TOKEN_EXPIRATION_TIME
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-refresh-token-expiration-time
-                  key: JWT_REFRESH_TOKEN_EXPIRATION_TIME
-            - name: ADMIN_EMAIL
-              valueFrom:
-                secretKeyRef:
-                  name: admin-email
-                  key: ADMIN_EMAIL
-            - name: ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: admin-password
-                  key: ADMIN_PASSWORD
-
+      - name: auth
+        image: yashwanthjavvaji/auth
+        env:
+        - name: MONGO_URI
+          value: 'mongodb://auth-mongo-service:27017/users'
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: JWT_SECRET
+        - name: JWT_EXPIRATION_TIME
+          valueFrom:
+            secretKeyRef:
+              name: jwt-expiration-time
+              key: JWT_EXPIRATION_TIME
+        - name: JWT_ACCESS_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-access-token-secret
+              key: JWT_ACCESS_TOKEN_SECRET
+        - name: JWT_ACCESS_TOKEN_EXPIRATION_TIME
+          valueFrom:
+            secretKeyRef:
+              name: jwt-access-token-expiration-time
+              key: JWT_ACCESS_TOKEN_EXPIRATION_TIME
+        - name: JWT_REFRESH_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-refresh-token-secret
+              key: JWT_REFRESH_TOKEN_SECRET
+        - name: JWT_REFRESH_TOKEN_EXPIRATION_TIME
+          valueFrom:
+            secretKeyRef:
+              name: jwt-refresh-token-expiration-time
+              key: JWT_REFRESH_TOKEN_EXPIRATION_TIME
+        - name: ADMIN_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: admin-email
+              key: ADMIN_EMAIL
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: admin-password
+              key: ADMIN_PASSWORD
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: auth-service
 spec:
   selector:
     app: auth
   ports:
-    - name: auth
-      protocol: TCP
-      port: 3000
-      targetPort: 3000
-      
+  - name: auth
+    protocol: TCP
+    port: 3000
+    targetPort: 3000  
+
+# apiVersion: apps/v1
+# kind: StatefulSet
+# metadata:
+#   name: auth-statefulset
+# spec:
+#   serviceName: auth-service
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: auth
+#   template:
+#     metadata:
+#       labels:
+#         app: auth
+#     spec:
+#       terminationGracePeriodSeconds: 10
+#       containers:
+#       - name: auth
+#         image: yashwanthjavvaji/auth
+#         ports:
+#         - containerPort: 3000
+#         volumeMounts:
+#         - name: auth-persistent-storage
+#           mountPath: /
+#         env:
+#         - name: MONGO_URI
+#           value: 'mongodb://auth-mongo-service:27017/users'
+#         - name: JWT_SECRET
+#           valueFrom:
+#             secretKeyRef:
+#               name: jwt-secret
+#               key: JWT_SECRET
+#         - name: JWT_EXPIRATION_TIME
+#           valueFrom:
+#             secretKeyRef:
+#               name: jwt-expiration-time
+#               key: JWT_EXPIRATION_TIME
+#         - name: JWT_ACCESS_TOKEN_SECRET
+#           valueFrom:
+#             secretKeyRef:
+#               name: jwt-access-token-secret
+#               key: JWT_ACCESS_TOKEN_SECRET
+#         - name: JWT_ACCESS_TOKEN_EXPIRATION_TIME
+#           valueFrom:
+#             secretKeyRef:
+#               name: jwt-access-token-expiration-time
+#               key: JWT_ACCESS_TOKEN_EXPIRATION_TIME
+#         - name: JWT_REFRESH_TOKEN_SECRET
+#           valueFrom:
+#             secretKeyRef:
+#               name: jwt-refresh-token-secret
+#               key: JWT_REFRESH_TOKEN_SECRET
+#         - name: JWT_REFRESH_TOKEN_EXPIRATION_TIME
+#           valueFrom:
+#             secretKeyRef:
+#               name: jwt-refresh-token-expiration-time
+#               key: JWT_REFRESH_TOKEN_EXPIRATION_TIME
+#         - name: ADMIN_EMAIL
+#           valueFrom:
+#             secretKeyRef:
+#               name: admin-email
+#               key: ADMIN_EMAIL
+#         - name: ADMIN_PASSWORD
+#           valueFrom:
+#             secretKeyRef:
+#               name: admin-password
+#               key: ADMIN_PASSWORD
+#   volumeClaimTemplates:
+#   - metadata:
+#       name: auth-persistent-storage
+#       annotations:
+#         volume.beta.kubernetes.io/storage-class: "standard"
+#     spec:
+#       accessModes: [ "ReadWriteOnce" ]
+#       resources:
+#         requests:
+#           storage: 1Gi
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: auth-service
+# spec:
+#   selector:
+#     app: auth
+#   ports:
+#   - name: auth
+#     protocol: TCP
+#     port: 3000
+#     targetPort: 3000  

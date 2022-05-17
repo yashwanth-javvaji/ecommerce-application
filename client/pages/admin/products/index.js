@@ -1,7 +1,7 @@
-// React
+// ReactJS
 import { useEffect, useState } from "react";
 
-// Next
+// NextJS
 import Head from 'next/head';
 import Link from "next/link";
 import Router from 'next/router';
@@ -10,6 +10,7 @@ import Router from 'next/router';
 // Components
 import Grid from "@mui/material/Grid";
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 // Data Grid
 import { DataGrid } from '@mui/x-data-grid';
 // Icons
@@ -77,10 +78,10 @@ const ProductsDashboard = () => {
     }, []);
 
     if (hasError) {
-        return <p>Something went wrong</p>
+        return <Typography variant="body2" color="error">Something went wrong</Typography>;
     }
     if (isLoading) {
-        return <p>Loading...</p>
+        return <Typography variant="body2" color="text.secondary">Loading...</Typography>;
     }
     return (
         <>

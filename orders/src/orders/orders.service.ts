@@ -1,5 +1,5 @@
 // NestJS
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -21,15 +21,20 @@ import { Order, OrderDocument } from './schemas/order.schema';
 export class OrdersService {
   constructor(
     @InjectModel(Order.name) private readonly orderModel: Model<OrderDocument>,
-    @Inject('ORDERS_SERVICE') private readonly client: ClientProxy
+    @Inject('ORDERS_PRODUCTS_SERVICE') private readonly productsClient: ClientProxy,
+    @Inject('ORDERS_EXPIRATION_SERVICE') private readonly expirationClient: ClientProxy,
+    @Inject('ORDERS_PAYMENTS_SERVICE') private readonly paymentsClient: ClientProxy
   ) { }
 
   async create(userId: ObjectId, createOrderDto: CreateOrderDto): Promise<Order> {
     const createdOrder = new this.orderModel({
       ...createOrderDto,
+      expiresAt: new Date(new Date().getTime() + (5 * 60 * 1000)), // expiration window time: 5 mins
       userId
     });
-    this.client.emit('orderCreated', createdOrder);
+    this.productsClient.emit('orderCreated', createdOrder);
+    this.expirationClient.emit('orderExpire', createdOrder);
+    this.paymentsClient.emit('orderCreated', createdOrder);
     return createdOrder.save();
   }
 
@@ -54,12 +59,27 @@ export class OrdersService {
     }).exec();
   }
 
-  async update(id: ObjectId, updateOrderDto: UpdateOrderDto): Promise<Order> {
-    const updatedOrder = await this.orderModel.findByIdAndUpdate(id, updateOrderDto, { new: true }).exec();
-    if (updatedOrder.orderStatus === OrderStatus.Cancelled) {
-      this.client.emit('orderCancelled', updatedOrder);
+  async update(id: ObjectId, updateOrderDto: Partial<UpdateOrderDto>): Promise<Order> {
+    const order = await this.orderModel.findById(id);
+    
+    if (!order) {
+      throw new NotFoundException();
     }
-    return updatedOrder;
+
+    if ((order.orderStatus === OrderStatus.Completed) && updateOrderDto.hasOwnProperty("orderStatus")) {
+      throw new BadRequestException();
+    }
+    
+    if (updateOrderDto.orderStatus === OrderStatus.Canceled) {
+      const updatedOrder = await this.orderModel.findByIdAndUpdate(id, updateOrderDto, { new: true }).exec();
+      if (updatedOrder.orderStatus === OrderStatus.Canceled) {
+        this.productsClient.emit('orderCanceled', updatedOrder);
+        this.paymentsClient.emit('orderCanceled', id);
+      }
+      return updatedOrder;
+    }
+
+    return await this.orderModel.findByIdAndUpdate(id, updateOrderDto, { new: true }).exec();
   }
 
   async remove(id: ObjectId) {

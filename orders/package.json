@@ -26,7 +26,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/mongoose": "^9.0.3",
     "@nestjs/platform-express": "^8.0.0",
-    "@yj-major-project/common": "^1.0.29",
+    "@yj-major-project/common": "^1.0.32",
     "amqp-connection-manager": "^4.1.2",
     "amqplib": "^0.8.0",
     "class-transformer": "^0.5.1",

@@ -16,11 +16,37 @@ import { OrdersService } from './orders.service';
   imports: [
     ClientsModule.register([
       {
-        name: 'ORDERS_SERVICE',
+        name: 'ORDERS_PRODUCTS_SERVICE',
         transport: Transport.RMQ,
         options: {
           urls: ['amqps://wjdovbpn:boXVmPjKWIlMJ0xaTBqm_5jBgA36EuSg@lionfish.rmq.cloudamqp.com/wjdovbpn'],
-          queue: 'orders_queue',
+          queue: 'orders_products_queue',
+          queueOptions: {
+            durable: false
+          }
+        }
+      }
+    ]),
+    ClientsModule.register([
+      {
+        name: 'ORDERS_EXPIRATION_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqps://wjdovbpn:boXVmPjKWIlMJ0xaTBqm_5jBgA36EuSg@lionfish.rmq.cloudamqp.com/wjdovbpn'],
+          queue: 'orders_expiration_queue',
+          queueOptions: {
+            durable: false
+          }
+        }
+      }
+    ]),
+    ClientsModule.register([
+      {
+        name: 'ORDERS_PAYMENTS_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqps://wjdovbpn:boXVmPjKWIlMJ0xaTBqm_5jBgA36EuSg@lionfish.rmq.cloudamqp.com/wjdovbpn'],
+          queue: 'orders_payments_queue',
           queueOptions: {
             durable: false
           }

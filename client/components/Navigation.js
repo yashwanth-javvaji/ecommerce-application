@@ -1,4 +1,4 @@
-// React
+// ReactJS
 import { useEffect, useState } from 'react';
 
 // NextJS
@@ -39,6 +39,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import PaymentsIcon from '@mui/icons-material/Payments';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import StarIcon from '@mui/icons-material/Star';
 // Styles
@@ -335,6 +336,12 @@ const Navigation = ({ currentUser }) => {
                                     <LocalShippingIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Orders" />
+                            </ListItemButton>
+                            <ListItemButton component="a" href="/admin/payments">
+                                <ListItemIcon>
+                                    <PaymentsIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Payments" />
                             </ListItemButton>
                         </List>
                     </>

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orders-mongo-depl
+  name: orders-mongo-deployment
 spec:
   replicas: 1
   selector:
@@ -15,13 +15,11 @@ spec:
       containers:
         - name: orders-mongo
           image: mongo
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: orders-mongo-srv
+  name: orders-mongo-service
 spec:
   selector:
     app: orders-mongo

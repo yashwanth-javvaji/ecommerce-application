@@ -1,4 +1,4 @@
-// React
+// ReactJS
 import { useEffect, useState } from "react";
 
 // NextJS
@@ -16,6 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import Typography from '@mui/material/Typography';
 // Icons
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 
@@ -78,10 +79,10 @@ const Order = () => {
     }, [id]);
 
     if (hasError) {
-        return <p>Something went wrong</p>
+        return <Typography variant="body2" color="error">Something went wrong</Typography>;
     }
     if (isLoading) {
-        return <p>Loading...</p>
+        return <Typography variant="body2" color="text.secondary">Loading...</Typography>;
     }
 
     const { orderStatus, deliveryStatus } = formData;
@@ -111,7 +112,7 @@ const Order = () => {
                                         value={orderStatus}
                                         onChange={handleChange}
                                     >
-                                        {["open", "confirmed", "complete", "cancelled"].map((orderStatus, index) => <MenuItem key={index} value={orderStatus}>{orderStatus}</MenuItem>)}
+                                        {["open", "confirmed", "complete", "canceled"].map((orderStatus, index) => <MenuItem key={index} value={orderStatus}>{orderStatus}</MenuItem>)}
                                     </Select>
                                 }
                                 sx={{ textAlign: 'center' }}
@@ -141,20 +142,30 @@ const Order = () => {
                             />
                         </Card>
                     </Grid>
-                    <Grid item xs={6}>
-                        <Card>
-                            <CardHeader title="Placed On" subheader={moment(createdAt).format('MMMM Do, YYYY, hh:mm:ss a')} sx={{ textAlign: 'center' }} />
-                        </Card>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Card>
-                            <CardHeader title="Delivery On" subheader={deliveredOn ? moment(deliveredOn).format('MMMM Do, YYYY, hh:mm:ss a') : "-"} sx={{ textAlign: 'center' }} />
-                        </Card>
-                    </Grid>
                     <Grid item xs={12}>
+                        <Box sx={{ w: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'grey.300' }}>
+                            <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
+                                <Typography color="text.secondary">
+                                    Placed On:
+                                </Typography>
+                                &nbsp;
+                                <Typography>
+                                    {moment(createdAt).format('MMMM Do, YYYY, hh:mm:ss a')}
+                                </Typography>
+                            </Box>
+                            <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
+                                <Typography color="text.secondary">
+                                    Delivered On:
+                                </Typography>
+                                &nbsp;
+                                <Typography>
+                                    {deliveredOn ? moment(deliveredOn).format('MMMM Do, YYYY, hh:mm:ss a') : "-"}
+                                </Typography>
+                            </Box>
+                        </Box>
                         <Table>
                             <TableBody>
-                                {items.map((item) => <Item key={item.id} item={item} isAdmin={true} />)}
+                                {items.map((item) => <Item key={item.id} item={item} />)}
                             </TableBody>
                         </Table>
                     </Grid>

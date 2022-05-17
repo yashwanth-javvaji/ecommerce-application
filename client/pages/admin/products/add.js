@@ -1,7 +1,7 @@
-// React
+// ReactJS
 import { useEffect, useState } from "react";
 
-// Next
+// NextJS
 import Head from 'next/head';
 import Image from 'next/image';
 import Router from 'next/router';
@@ -19,6 +19,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Paper from "@mui/material/Paper";
 import Select from '@mui/material/Select';
 import TextField from "@mui/material/TextField";
+import Typography from '@mui/material/Typography';
 // Icons
 import CreateIcon from '@mui/icons-material/Create';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
@@ -161,10 +162,10 @@ const AddProduct = () => {
     }, [productImage]);
 
     if (hasError) {
-        return <p>Something went wrong</p>
+        return <Typography variant="body2" color="error">Something went wrong</Typography>;
     }
     if (isLoading) {
-        return <p>Loading...</p>
+        return <Typography variant="body2" color="text.secondary">Loading...</Typography>;
     }
     return (
         <>

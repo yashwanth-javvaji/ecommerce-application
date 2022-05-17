@@ -1,7 +1,7 @@
-// React
+// ReactJS
 import { useState } from "react";
 
-// Next
+// NextJS
 import Head from 'next/head';
 import Router from 'next/router';
 

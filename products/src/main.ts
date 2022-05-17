@@ -22,7 +22,7 @@ async function bootstrap() {
     transport: Transport.RMQ,
     options: {
       urls: ['amqps://wjdovbpn:boXVmPjKWIlMJ0xaTBqm_5jBgA36EuSg@lionfish.rmq.cloudamqp.com/wjdovbpn'],
-      queue: 'users_queue',
+      queue: 'auth_products_queue',
       queueOptions: {
         durable: false
       },
@@ -32,7 +32,7 @@ async function bootstrap() {
     transport: Transport.RMQ,
     options: {
       urls: ['amqps://wjdovbpn:boXVmPjKWIlMJ0xaTBqm_5jBgA36EuSg@lionfish.rmq.cloudamqp.com/wjdovbpn'],
-      queue: 'orders_queue',
+      queue: 'orders_products_queue',
       queueOptions: {
         durable: false
       },
