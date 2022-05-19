@@ -4,6 +4,10 @@ metadata:
   name: orders-deployment
 spec:
   replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
   selector:
     matchLabels:
       app: orders

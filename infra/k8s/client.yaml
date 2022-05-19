@@ -4,6 +4,10 @@ metadata:
   name: client-deployment
 spec:
   replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
   selector:
     matchLabels:
       app: client
