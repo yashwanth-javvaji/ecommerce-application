@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: expiration-redis-deployment
+  name: expiration-redis-statefulset
 spec:
-  replicas: 1
+  serviceName: expiration-redis-service
+  replicas: 3
   selector:
     matchLabels:
       app: expiration-redis
@@ -12,9 +13,25 @@ spec:
       labels:
         app: expiration-redis
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
       - name: expiration-redis
         image: redis
+        ports:
+        - containerPort: 6379
+        volumeMounts:
+        - name: expiration-redis-persistent-storage
+          mountPath: /Users/yashwanth.javvaji/kubernetes/expiration-redis
+  volumeClaimTemplates:
+  - metadata:
+      name: expiration-redis-persistent-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: "hostpath"
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
 ---
 apiVersion: v1
 kind: Service

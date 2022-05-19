@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: auth-mongo-deployment
+  name: auth-mongo-statefulset
 spec:
-  replicas: 1
+  serviceName: auth-mongo-service
+  replicas: 3
   selector:
     matchLabels:
       app: auth-mongo
@@ -12,9 +13,25 @@ spec:
       labels:
         app: auth-mongo
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
       - name: auth-mongo
         image: mongo
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: auth-mongo-persistent-storage
+          mountPath: /Users/yashwanth.javvaji/kubernetes/auth-mongo
+  volumeClaimTemplates:
+  - metadata:
+      name: auth-mongo-persistent-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: "hostpath"
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
@@ -28,51 +45,3 @@ spec:
     protocol: TCP
     port: 27017
     targetPort: 27017
-
-# apiVersion: apps/v1
-# kind: StatefulSet
-# metadata:
-#   name: auth-mongo-statefulset
-# spec:
-#   serviceName: auth-mongo-service
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: auth-mongo
-#   template:
-#     metadata:
-#       labels:
-#         app: auth-mongo
-#     spec:
-#       terminationGracePeriodSeconds: 10
-#       containers:
-#       - name: auth-mongo
-#         image: mongo
-#         ports:
-#         - containerPort: 27017
-#         volumeMounts:
-#         - name: auth-mongo-persistent-storage
-#           mountPath: /data/db
-#   volumeClaimTemplates:
-#   - metadata:
-#       name: auth-mongo-persistent-storage
-#       annotations:
-#         volume.beta.kubernetes.io/storage-class: "standard"
-#     spec:
-#       accessModes: [ "ReadWriteOnce" ]
-#       resources:
-#         requests:
-#           storage: 1Gi
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: auth-mongo-service
-# spec:
-#   selector:
-#     app: auth-mongo
-#   ports:
-#   - name: db
-#     protocol: TCP
-#     port: 27017
-#     targetPort: 27017

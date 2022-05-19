@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: orders-mongo-deployment
+  name: orders-mongo-statefulset
 spec:
-  replicas: 1
+  serviceName: orders-mongo-service
+  replicas: 3
   selector:
     matchLabels:
       app: orders-mongo
@@ -12,9 +13,25 @@ spec:
       labels:
         app: orders-mongo
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
-        - name: orders-mongo
-          image: mongo
+      - name: orders-mongo
+        image: mongo
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: orders-mongo-persistent-storage
+          mountPath: /Users/yashwanth.javvaji/kubernetes/orders-mongo
+  volumeClaimTemplates:
+  - metadata:
+      name: orders-mongo-persistent-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: "hostpath"
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
@@ -24,7 +41,7 @@ spec:
   selector:
     app: orders-mongo
   ports:
-    - name: db
-      protocol: TCP
-      port: 27017
-      targetPort: 27017
+  - name: db
+    protocol: TCP
+    port: 27017
+    targetPort: 27017

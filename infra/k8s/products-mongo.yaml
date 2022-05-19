@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: products-mongo-deployment
+  name: products-mongo-statefulset
 spec:
-  replicas: 1
+  serviceName: products-mongo-service
+  replicas: 3
   selector:
     matchLabels:
       app: products-mongo
@@ -12,9 +13,25 @@ spec:
       labels:
         app: products-mongo
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
         - name: products-mongo
           image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: products-mongo-persistent-storage
+              mountPath: /Users/yashwanth.javvaji/kubernetes/products-mongo
+  volumeClaimTemplates:
+  - metadata:
+      name: products-mongo-persistent-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: "hostpath"
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
@@ -24,55 +41,7 @@ spec:
   selector:
     app: products-mongo
   ports:
-    - name: db
-      protocol: TCP
-      port: 27017
-      targetPort: 27017
-
-# apiVersion: apps/v1
-# kind: StatefulSet
-# metadata:
-#   name: products-mongo-statefulset
-# spec:
-#   serviceName: products-mongo-service
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: products-mongo
-#   template:
-#     metadata:
-#       labels:
-#         app: products-mongo
-#     spec:
-#       terminationGracePeriodSeconds: 10
-#       containers:
-#         - name: products-mongo
-#           image: mongo
-#           ports:
-#             - containerPort: 27017
-#           volumeMounts:
-#             - name: products-mongo-persistent-storage
-#               mountPath: /data/db
-#   volumeClaimTemplates:
-#   - metadata:
-#       name: products-mongo-persistent-storage
-#       annotations:
-#         volume.beta.kubernetes.io/storage-class: "standard"
-#     spec:
-#       accessModes: [ "ReadWriteOnce" ]
-#       resources:
-#         requests:
-#           storage: 1Gi
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: products-mongo-service
-# spec:
-#   selector:
-#     app: products-mongo
-#   ports:
-#   - name: db
-#     protocol: TCP
-#     port: 27017
-#     targetPort: 27017
+  - name: db
+    protocol: TCP
+    port: 27017
+    targetPort: 27017
