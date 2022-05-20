@@ -18,6 +18,15 @@ kubectl rollout restart deployment/frontend-depl
 kubectl get pv
 
 
+kubectl get events --sort-by=.metadata.creationTimestam
+
+kubectl get pvc 
+kubectl delete pvc --all
+
+kubectl get events
+
+
+
 
 
 WORKER NODE 

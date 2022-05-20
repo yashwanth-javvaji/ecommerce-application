@@ -3,5 +3,4 @@ kind: StorageClass
 metadata:
   name: hostpath
 provisioner: kubernetes.io/hostpath
-parameters:
-  type: pd-ssd
+volumeBindingMode: WaitForFirstConsumer
