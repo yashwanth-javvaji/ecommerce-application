@@ -1,0 +1,13 @@
+
+#ansible-playbook playbook_configuration_ec2.yml -i hosts 
+
+---
+- name: Let's copy our executable script to remote location, execute script and get result back.
+  hosts: master
+  remote_user: ubuntu
+  tasks:
+     - name: Transfer executable script script
+       copy: src=./configuration_script_master.sh dest=/home/ubuntu/ mode=0777    
+ 
+     - name: Execute the script
+       command: sh /home/ubuntu/configuration_script_master.sh 
