@@ -1,8 +1,3 @@
-#https://stackoverflow.com/questions/53918841/how-to-install-docker-on-amazon-linux2
-#https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html
-#https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-centos-7
-#https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
-
 
 sudo cat<<EOF | sudo tee -a /etc/sudoers
 ubuntu ALL=(ALL) NOPASSWD: ALL
@@ -63,22 +58,10 @@ sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 
-
-#sudo kubeadm reset
-
-sudo kubeadm init
-
-
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-sleep 10
-
-hostname=$(hostname)
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 kubectl taint nodes  $hostname node-role.kubernetes.io/master-
+
+
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/cloud/deploy.yaml
 
@@ -98,3 +81,4 @@ kubectl create secret generic stripe-secret-key --from-literal=STRIPE_SECRET_KEY
 ### Node.js v16 ###
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo bash -
 sudo apt install -y nodejs vim
+
