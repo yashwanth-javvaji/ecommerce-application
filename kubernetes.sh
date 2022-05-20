@@ -2,6 +2,8 @@ kubectl delete all --all
 
 cd infra/k8s
 
+kubectl apply -f storageclass.yml 
+
 kubectl apply -f auth-mongo.yaml
 kubectl apply -f auth.yaml
 
