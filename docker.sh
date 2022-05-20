@@ -1,3 +1,5 @@
+docker login -u yashwanthjavvaji208@gmail.com -p Password@
+
 cd auth
 docker build -t yashwanthjavvaji/auth .
 docker push yashwanthjavvaji/auth
