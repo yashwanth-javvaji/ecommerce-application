@@ -1,4 +1,4 @@
-
+docker login -u yashwanthjavvaji -p Password@
 
 cd auth
 docker build -t yashwanthjavvaji/auth .

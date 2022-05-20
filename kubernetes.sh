@@ -1,4 +1,4 @@
-kubectl delete all --all
+#kubectl delete all --all
 
 cd infra/k8s
 

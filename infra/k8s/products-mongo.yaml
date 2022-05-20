@@ -4,7 +4,7 @@ metadata:
   name: products-mongo-statefulset
 spec:
   serviceName: products-mongo-service
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: products-mongo
