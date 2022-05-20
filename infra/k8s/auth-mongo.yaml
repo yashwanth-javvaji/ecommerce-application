@@ -21,7 +21,7 @@ spec:
         - containerPort: 27017
         volumeMounts:
         - name: auth-mongo-persistent-storage
-          mountPath: /Users/yashwanth.javvaji/kubernetes/auth-mongo
+          mountPath: /home/ubuntu/auth-mongo
   volumeClaimTemplates:
   - metadata:
       name: auth-mongo-persistent-storage

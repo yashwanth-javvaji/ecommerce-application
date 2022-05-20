@@ -21,7 +21,7 @@ spec:
         - containerPort: 6379
         volumeMounts:
         - name: expiration-redis-persistent-storage
-          mountPath: /Users/yashwanth.javvaji/kubernetes/expiration-redis
+          mountPath: /home/ubuntu/expiration-redis
   volumeClaimTemplates:
   - metadata:
       name: expiration-redis-persistent-storage

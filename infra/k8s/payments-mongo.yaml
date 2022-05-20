@@ -21,7 +21,7 @@ spec:
         - containerPort: 27017
         volumeMounts:
         - name: payments-mongo-persistent-storage
-          mountPath: /Users/yashwanth.javvaji/kubernetes/payments-mongo
+          mountPath: /home/ubuntu/payments-mongo
   volumeClaimTemplates:
   - metadata:
       name: payments-mongo-persistent-storage

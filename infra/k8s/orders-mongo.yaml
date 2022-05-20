@@ -21,7 +21,7 @@ spec:
         - containerPort: 27017
         volumeMounts:
         - name: orders-mongo-persistent-storage
-          mountPath: /Users/yashwanth.javvaji/kubernetes/orders-mongo
+          mountPath: /home/ubuntu/orders-mongo
   volumeClaimTemplates:
   - metadata:
       name: orders-mongo-persistent-storage
