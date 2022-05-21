@@ -26,7 +26,7 @@ spec:
   - metadata:
       name: products-mongo-persistent-storage
       annotations:
-        volume.beta.kubernetes.io/storage-class: "hostpath"
+        volume.beta.kubernetes.io/storage-class: "gp2"
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
