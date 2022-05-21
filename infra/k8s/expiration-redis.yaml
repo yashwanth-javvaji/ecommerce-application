@@ -4,7 +4,7 @@ metadata:
   name: expiration-redis-statefulset
 spec:
   serviceName: expiration-redis-service
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: expiration-redis

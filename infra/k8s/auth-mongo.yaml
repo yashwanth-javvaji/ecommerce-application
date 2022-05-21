@@ -4,7 +4,7 @@ metadata:
   name: auth-mongo-statefulset
 spec:
   serviceName: auth-mongo-service
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: auth-mongo
@@ -21,17 +21,17 @@ spec:
         - containerPort: 27017
         volumeMounts:
         - name: auth-mongo-persistent-storage
-          mountPath: /home/ubuntu/auth-mongo
+          mountPath: /auth-mongo
   volumeClaimTemplates:
   - metadata:
       name: auth-mongo-persistent-storage
       annotations:
-        volume.beta.kubernetes.io/storage-class: "hostpath"
+        volume.beta.kubernetes.io/storage-class: "gp2"
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: 1Gi
+          storage: 0.5Gi
 ---
 apiVersion: v1
 kind: Service
