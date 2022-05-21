@@ -1,9 +1,9 @@
 [master]
-34.224.174.106
+44.204.194.153
 
 [worker]
-34.202.161.71
+54.86.75.251
 100.26.44.64
 
 [all:vars]
-ansible_user=ubuntu
+ansible_user=ec2-user

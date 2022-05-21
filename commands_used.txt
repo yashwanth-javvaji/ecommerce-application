@@ -1,3 +1,17 @@
+
+
+'''
+https://techviewleo.com/how-to-install-grafana-on-amazon-linux/
+
+'''
+
+
+
+
+
+
+
+
 KUBERENETS
 
 kubectl get all 
@@ -27,6 +41,10 @@ kubectl get events
 
 
 EKSCTL
+sed -i .bak -e 's/v1alpha1/v1beta1/' ~/.kube/config
+#https://stackoverflow.com/questions/71318743/kubectl-versions-error-exec-plugin-is-configured-to-use-api-version-client-auth
+
+
 
 eksctl create cluster  \
 --name web-cluster \
@@ -34,8 +52,42 @@ eksctl create cluster  \
 --zones us-east-1a,us-east-1b,us-east-1c \
 --nodegroup-name  linux-nodes \
 --node-type t2.medium \
---nodes 2
+--instance-types t2.medium,t2.large
+--nodes 2 \
+--spot \
+--nodes-min 2 \
+--nodes-max 4 \
+--ssh-access \
+--enable-ssm 
 
+=====
+
+--dry-run
+'''
+eksctl create cluster  --zones us-east-1a,us-east-1b,us-east-1c \
+--node-volume-size 16 \
+--instance-types=t2.medium,t2.large,t3.medium \
+--name web-clusterpub \
+--version 1.21 \
+--nodegroup-name  linux-nodes \
+--nodes 1 \
+--spot \
+--nodes-min 1 \
+--nodes-max 4 \
+--ssh-access=true \
+--enable-ssm \
+--node-volume-type gp2 \
+--ssh-public-key=eksctl_instance
+
+'''
+====
+--tags stringToString   Used to tag the AWS resources. List of comma separated KV pairs "k1=v1,k2=v2" (default [])
+--config-file string    load configuration from a file (or stdin if set to '-')
+ --ssh-access                     control SSH access for nodes. Uses ~/.ssh/id_rsa.pub as default key path if enabled
+--instance-selector-vcpus=2 \
+--instance-selector-memory=4 \
+
+====
 eksctl create cluster 'sample-cluster' --zones us-east-1a,us-east-1b,us-east-1c
 
 eksctl delete cluster --name web-cluster
@@ -93,3 +145,4 @@ ps -aux | grep ubuntu
     NETWORK
 
 netstat -pnlt | grep 6443
+ sudo netstat -ltnp | grep -w '9090'

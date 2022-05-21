@@ -4,10 +4,16 @@
 ---
 - name: Let's copy our executable script to remote location, execute script and get result back.
   hosts: master
-  remote_user: ubuntu
+  #remote_user: ubuntu
+  remote_user: ec2-user
+
   tasks:
      - name: Transfer executable script script
-       copy: src=./configuration_script_master.sh dest=/home/ubuntu/ mode=0777    
- 
+       #copy: src=./configuration_script_master.sh dest=/home/ubuntu/ mode=0777   
+       copy: src=./configuration_script_master.sh dest=/home/ec2-user mode=0777   
+       
      - name: Execute the script
-       command: sh /home/ubuntu/configuration_script_master.sh 
+       #command: sh /home/ubuntu/configuration_script_master.sh 
+       
+       command: sh /home/ec2-user/configuration_script_master.sh 
+
