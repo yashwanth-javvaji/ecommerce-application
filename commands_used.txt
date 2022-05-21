@@ -26,6 +26,19 @@ kubectl delete pvc --all
 kubectl get events
 
 
+EKSCTL
+
+eksctl create cluster  \
+--name web-cluster \
+--version 1.21 \ 
+--zones us-east-1a,us-east-1b,us-east-1c \
+--nodegroup-name  linux-nodes \
+--node-type t2.medium \
+--nodes 2
+
+eksctl create cluster 'sample-cluster' --zones us-east-1a,us-east-1b,us-east-1c
+
+eksctl delete cluster --name web-cluster
 
 
 
