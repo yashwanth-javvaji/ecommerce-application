@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sh 'chmod -R 777 ./kubernetes.sh'
                 //sh 'sudo -S su ubuntu -c "./kubernetes.sh" '
-                sh   'sudo  -c "./kubernetes.sh" '
+                sh   'sudo  "./kubernetes.sh" '
             }   
         }
     }
