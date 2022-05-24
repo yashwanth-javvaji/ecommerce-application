@@ -60,15 +60,15 @@ kubectl taint nodes  $hostname node-role.kubernetes.io/master-
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/cloud/deploy.yaml
 
-kubectl create secret generic jwt-secret --from-literal=JWT_SECRET=majorprojectsecret
-kubectl create secret generic jwt-expiration-time --from-literal=JWT_EXPIRATION_TIME=7d
-kubectl create secret generic jwt-access-token-secret --from-literal=JWT_ACCESS_TOKEN_SECRET=majorprojectsecret
-kubectl create secret generic jwt-access-token-expiration-time --from-literal=JWT_ACCESS_TOKEN_EXPIRATION_TIME=1h
-kubectl create secret generic jwt-refresh-token-secret --from-literal=JWT_REFRESH_TOKEN_SECRET=majorprojectsecret
-kubectl create secret generic jwt-refresh-token-expiration-time --from-literal=JWT_REFRESH_TOKEN_EXPIRATION_TIME=7d
-kubectl create secret generic admin-email --from-literal=ADMIN_EMAIL=admin@sky-ecommerce.com
-kubectl create secret generic admin-password --from-literal=ADMIN_PASSWORD=SKY@1234
-kubectl create secret generic stripe-secret-key --from-literal=STRIPE_SECRET_KEY=sk_test_51KLVyISGQJCC9tNftUaobPsIVzcqE17K0gIuhTUh5wB67dTy79BRHjq208aiDae5aZWNVyux0P48vJa02IWZS8t900VzOCO9eJ
+# kubectl create secret generic jwt-secret --from-literal=JWT_SECRET=majorprojectsecret
+# kubectl create secret generic jwt-expiration-time --from-literal=JWT_EXPIRATION_TIME=7d
+# kubectl create secret generic jwt-access-token-secret --from-literal=JWT_ACCESS_TOKEN_SECRET=majorprojectsecret
+# kubectl create secret generic jwt-access-token-expiration-time --from-literal=JWT_ACCESS_TOKEN_EXPIRATION_TIME=1h
+# kubectl create secret generic jwt-refresh-token-secret --from-literal=JWT_REFRESH_TOKEN_SECRET=majorprojectsecret
+# kubectl create secret generic jwt-refresh-token-expiration-time --from-literal=JWT_REFRESH_TOKEN_EXPIRATION_TIME=7d
+# kubectl create secret generic admin-email --from-literal=ADMIN_EMAIL=admin@sky-ecommerce.com
+# kubectl create secret generic admin-password --from-literal=ADMIN_PASSWORD=SKY@1234
+# kubectl create secret generic stripe-secret-key --from-literal=STRIPE_SECRET_KEY=sk_test_51KLVyISGQJCC9tNftUaobPsIVzcqE17K0gIuhTUh5wB67dTy79BRHjq208aiDae5aZWNVyux0P48vJa02IWZS8t900VzOCO9eJ
 
 sudo apt update
 sudo apt install openjdk-8-jdk -y

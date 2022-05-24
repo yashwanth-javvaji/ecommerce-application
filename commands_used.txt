@@ -109,6 +109,9 @@ kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName=<node>
 
 ANSIBLE
 
+https://medium.com/geekculture/how-to-deploy-the-kubernetes-application-to-aws-eks-using-terraform-and-ansible-7679a3a207a8
+
+
 ansible-playbook -i ansible/hosts ansible/playbook_ec2_create.yml 
 
 ansible-playbook -i ansible/hosts ansible/playbook_configuration_master.yml

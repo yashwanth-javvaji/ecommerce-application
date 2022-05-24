@@ -27,7 +27,7 @@ export theIPaddress=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut
 kubectl patch svc ingress-nginx-controller   -n ingress-nginx -p '{"spec": {"type": "LoadBalancer", "externalIPs":["'"$theIPaddress"'"]}}'
 
 
-kubectl apply -f storageclass.yml 
+#kubectl apply -f storageclass.yml 
 
 kubectl apply -f auth-mongo.yaml
 kubectl apply -f auth.yaml
