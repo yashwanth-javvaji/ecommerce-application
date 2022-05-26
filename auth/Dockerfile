@@ -38,6 +38,8 @@
 FROM node:lts-alpine
 
 WORKDIR /app
+RUN npm config rm proxy
+RUN npm config rm https-proxy
 COPY package.json .
 RUN npm install
 COPY . .
