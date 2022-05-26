@@ -11,6 +11,8 @@ pipeline {
             steps {
                 sh 'chmod -R 777 ./docker.sh'
                 sh './docker.sh'
+               sh 'ansible-playbook -i ansible/hosts ansible/run_docker.yml'
+
             }   
         }
         stage('Testing') {

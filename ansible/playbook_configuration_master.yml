@@ -10,7 +10,7 @@
   tasks:
      - name: Transfer executable script script
        #copy: src=./configuration_script_master.sh dest=/home/ubuntu/ mode=0777   
-       copy: src=./configuration_script_master.sh dest=/home/ec2-user mode=0777   
+       copy: src=./configuration_script_master_eks.sh dest=/home/ec2-user mode=0777   
        
      - name: Execute the script
        #command: sh /home/ubuntu/configuration_script_master.sh 

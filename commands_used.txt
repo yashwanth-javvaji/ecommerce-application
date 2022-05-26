@@ -70,7 +70,7 @@ eksctl create cluster  --zones us-east-1a,us-east-1b,us-east-1c \
 --name web-clusterpub \
 --version 1.21 \
 --nodegroup-name  linux-nodes \
---nodes 1 \
+--nodes 3 \
 --spot \
 --nodes-min 1 \
 --nodes-max 4 \
@@ -149,3 +149,29 @@ ps -aux | grep ubuntu
 
 netstat -pnlt | grep 6443
  sudo netstat -ltnp | grep -w '9090'
+
+
+
+
+
+
+
+
+
+ =========
+
+ ssh -i "eksctl_instance.pem" ec2-user@44.198.192.77 
+
+
+ -- ssh -tt  -i "eksctl_instance.pem" ec2-user@44.198.192.77 'bash -s '<local.sh
+
+ssh -i "eksctl_instance.pem"  ec2-user@ <<'ENDSSH'
+#commands to run on remote host
+ENDSSH
+
+
+
+eksctl delete cluster --name web-clusterpub
+
+
+ =========
