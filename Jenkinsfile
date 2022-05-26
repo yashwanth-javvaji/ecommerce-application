@@ -25,7 +25,9 @@ pipeline {
                 //sh 'sudo -S su ubuntu -c "./kubernetes.sh" '
                 sh "sed -i .bak -e 's/v1alpha1/v1beta1/' ~/.kube/config"
                 sh   'sudo  "./kubernetes.sh" '
+                
             }   
         }
+
     }
 }

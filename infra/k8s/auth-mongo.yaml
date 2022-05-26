@@ -4,7 +4,7 @@ metadata:
   name: auth-mongo-statefulset
 spec:
   serviceName: auth-mongo-service
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: auth-mongo
@@ -13,7 +13,7 @@ spec:
       labels:
         app: auth-mongo
     spec:
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 30
       containers:
       - name: auth-mongo
         image: mongo

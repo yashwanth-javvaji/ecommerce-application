@@ -4,7 +4,7 @@ metadata:
   name: products-mongo-statefulset
 spec:
   serviceName: products-mongo-service
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: products-mongo
@@ -13,7 +13,7 @@ spec:
       labels:
         app: products-mongo
     spec:
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 30
       containers:
         - name: products-mongo
           image: mongo

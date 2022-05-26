@@ -15,12 +15,6 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 
 kubectl apply -f ingress-srv-prod.yaml --record=true
-sleep 5
-kubectl apply -f ingress-srv-prod.yaml
-#sleep 15
-
-kubectl apply -f ingress-srv-prod.yaml
-#sleep 15
 
 export theIPaddress=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
 
