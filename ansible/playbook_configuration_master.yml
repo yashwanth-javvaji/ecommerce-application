@@ -14,6 +14,7 @@
        
      - name: Execute the script
        #command: sh /home/ubuntu/configuration_script_master.sh 
-       
+       command: sh cd ~
        command: sh /home/ec2-user/configuration_script_master_eks.sh 
+
 
