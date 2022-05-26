@@ -1,15 +1,15 @@
-FROM node:lts-alpine AS builder
-WORKDIR /app
-COPY ./package.json ./package-lock.json ./
-RUN npm config set registry https://registry.npmjs.org/
-RUN npm install --ignore-scripts --unsafe-perm
-COPY . .
-RUN npm run build
+# FROM node:lts-alpine AS builder
+# WORKDIR /app
+# COPY ./package.json ./package-lock.json ./
+# RUN npm config set registry https://registry.npmjs.org/
+# RUN npm install --ignore-scripts --unsafe-perm
+# COPY . .
+# RUN npm run build
 
-FROM node:lts-alpine AS runner
-WORKDIR /app
-COPY --from=builder /app ./
-CMD ["npm", "run", "start:prod"]
+# FROM node:lts-alpine AS runner
+# WORKDIR /app
+# COPY --from=builder /app ./
+# CMD ["npm", "run", "start:prod"]
 
 # FROM node:14-alpine
 # WORKDIR /src
@@ -35,12 +35,12 @@ CMD ["npm", "run", "start:prod"]
 # CMD ["npm", "run", "start"]
 
 
-# FROM node:lts-alpine
+FROM node:lts-alpine
 
-# WORKDIR /app
-# COPY package.json .
-# RUN npm install
-# COPY . .
-# RUN npm run build
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . .
+#RUN npm run build
 
-# CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start"]
