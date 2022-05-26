@@ -11,7 +11,7 @@
 # CMD ["npm", "run", "start:prod"]
 
 
-FROM node:lts-alpine
+FROM node
 
 WORKDIR /app
 COPY package.json .

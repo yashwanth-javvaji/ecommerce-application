@@ -29,7 +29,7 @@
 
 # CMD ["npm", "run", "start"]
 
-FROM node:alpine
+FROM node
 
 WORKDIR /app
 COPY package.json .
