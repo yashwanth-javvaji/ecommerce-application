@@ -34,7 +34,7 @@ FROM node:13-alpine
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-
+RUN npm update -g npm
 RUN npm install
 
 COPY . .
