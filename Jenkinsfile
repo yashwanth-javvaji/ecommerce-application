@@ -9,10 +9,7 @@ pipeline {
         }        
         stage('Build Docker Images') {
             steps {
-                sh 'chmod -R 777 ./docker.sh'
-                sh './docker.sh'
-               sh 'ansible-playbook -i ansible/hosts ansible/run_docker.yml'
-
+                sh 'ansible-playbook -i ansible/hosts ansible/playbook_configuration_master.yml'
             }   
         }
         stage('Testing') {
