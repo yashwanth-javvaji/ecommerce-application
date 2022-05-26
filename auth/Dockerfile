@@ -1,15 +1,14 @@
-# FROM node:lts-alpine 
-# WORKDIR /app
-# COPY ./package.json ./package-lock.json ./
-# RUN npm install
-# COPY . .
-# RUN npm run build
-# CMD ["npm", "run", "start"]
+FROM node:lts-alpine AS builder
+WORKDIR /app
+COPY ./package.json ./package-lock.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
-#FROM node:lts-alpine AS runner
-# WORKDIR /app
-# COPY  /app ./
-
+FROM node:lts-alpine AS runner
+WORKDIR /app
+COPY --from=builder /app ./
+CMD ["npm", "run", "start:prod"]
 
 # FROM node:14-alpine
 # WORKDIR /src
@@ -34,12 +33,13 @@
 
 # CMD ["npm", "run", "start"]
 
-FROM node:alpine
 
-WORKDIR /app
-COPY package.json .
-RUN npm install
-COPY . .
-RUN npm run build
+# FROM node:lts-alpine
 
-CMD ["npm", "run", "start"]
+# WORKDIR /app
+# COPY package.json .
+# RUN npm install
+# COPY . .
+# RUN npm run build
+
+# CMD ["npm", "run", "start"]
