@@ -91,8 +91,3 @@ export const updateOrder = async ({ id, data, onSuccess }) => {
         }
     }
 };
-
-// // DELETE (Admin)
-// export const deleteOrder = () => {
-
-// };

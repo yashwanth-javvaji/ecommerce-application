@@ -20,11 +20,9 @@ export class UsersService {
   ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    if (!this.findByEmail(createUserDto["email"])) {
-      delete Object.assign(createUserDto, { ["_id"]: createUserDto["id"] })["id"];
-      const createdUser = new this.userModel(createUserDto);
-      return createdUser.save();
-    }
+    delete Object.assign(createUserDto, { ["_id"]: createUserDto["id"] })["id"];
+    const createdUser = new this.userModel(createUserDto);
+    return createdUser.save();
   }
 
   async findAll(): Promise<User[]> {
@@ -33,10 +31,6 @@ export class UsersService {
 
   async findById(id: ObjectId): Promise<User> {
     return await this.userModel.findById(id).exec();
-  }
-
-  async findByEmail(email: string): Promise<User> {
-    return await this.userModel.findOne({ email }).exec();
   }
 
   async update(id: ObjectId, updateUserDto: Partial<UpdateUserDto>): Promise<User> {

@@ -25,15 +25,17 @@ export class UsersService implements OnModuleInit {
   ) { }
 
   async onModuleInit() {
-    const createdAdmin = new this.userModel({
-      "firstname": "Admin",
-      "lastname": "SKY E-Commerce",
-      "email": process.env.ADMIN_EMAIL,
-      "password": process.env.ADMIN_PASSWORD,
-      "roles": [Role.Admin]
-    });
-    this.client.emit('userCreated', createdAdmin);
-    createdAdmin.save();
+    if (!(await this.userModel.findOne({ email: process.env.ADMIN_EMAIL }))) {
+      const createdAdmin = new this.userModel({
+        "firstname": "Admin",
+        "lastname": "SKY E-Commerce",
+        "email": process.env.ADMIN_EMAIL,
+        "password": process.env.ADMIN_PASSWORD,
+        "roles": [Role.Admin]
+      });
+      this.client.emit('userCreated', createdAdmin);
+      createdAdmin.save();
+    }
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {

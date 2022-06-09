@@ -20,10 +20,3 @@ kubectl apply -f payments.yaml
 kubectl apply -f client.yaml
 
 kubectl apply -f ingress-srv-prod.yaml
-
-kubectl rollout restart deployment/auth-deployment
-kubectl rollout restart deployment/products-deployment
-kubectl rollout restart deployment/orders-deployment
-kubectl rollout restart deployment/expiration-deployment
-kubectl rollout restart deployment/payments-deployment
-kubectl rollout restart deployment/client-deployment

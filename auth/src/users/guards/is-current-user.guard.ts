@@ -17,6 +17,6 @@ export class IsCurrentUser implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const params = request.params;
     const user = await this.usersService.findById(request.user.id);
-    return user._id == params.id;
+    return !!user && (user._id == params.id);
   }
 }

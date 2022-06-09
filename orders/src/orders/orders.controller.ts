@@ -22,8 +22,6 @@ import { OrdersService } from './orders.service';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) { }
 
-  @hasRoles(Role.Admin)
-  @UseGuards(RolesGuard)
   @Post()
   async create(@Request() req, @Body() createOrderDto: CreateOrderDto): Promise<Order> {
     return await this.ordersService.create(req.user.id, createOrderDto);

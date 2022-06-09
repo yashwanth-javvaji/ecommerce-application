@@ -146,16 +146,12 @@ const EditProduct = () => {
     };
 
     useEffect(() => {
-        setIsLoading(true);
-        getAllCategories()
-            .then((categories) => setCategories(categories))
-            .catch((err) => setHasError(true))
-            .finally(() => setIsLoading(false));
-    }, []);
-
-    useEffect(() => {
         if (id) {
             setIsLoading(true);
+            getAllCategories()
+                .then((categories) => setCategories(categories))
+                .catch((err) => setHasError(true))
+                .finally(() => setIsLoading(false));
             getProductById(id)
                 .then(async (product) => {
                     const { productImage, name, category, description, brand, stock, price, discount } = product;

@@ -1,13 +1,69 @@
+# apiVersion: apps/v1
+# kind: StatefulSet
+# metadata:
+#   name: products-statefulset
+# spec:
+#   serviceName: products-service
+#   replicas: 3
+#   selector:
+#     matchLabels:
+#       app: products
+#   template:
+#     metadata:
+#       labels:
+#         app: products
+#     spec:
+#       containers:
+#       - name: products
+#         image: yashwanthjavvaji/products
+#         ports:
+#         - containerPort: 3000
+#         volumeMounts:
+#         - name: products-persistent-storage
+#           mountPath: /Users/yashwanth.javvaji/kubernetes/products
+#         env:
+#         - name: MONGO_URI
+#           value: 'mongodb://products-mongo-service:27017/products'
+#         - name: JWT_ACCESS_TOKEN_SECRET
+#           valueFrom:
+#             secretKeyRef:
+#               name: jwt-access-token-secret
+#               key: JWT_ACCESS_TOKEN_SECRET
+#         - name: JWT_REFRESH_TOKEN_SECRET
+#           valueFrom:
+#             secretKeyRef:
+#               name: jwt-refresh-token-secret
+#               key: JWT_REFRESH_TOKEN_SECRET
+#   volumeClaimTemplates:
+#   - metadata:
+#       name: products-persistent-storage
+#       annotations:
+#         volume.beta.kubernetes.io/storage-class: "hostpath"
+#     spec:
+#       accessModes: [ "ReadWriteOnce" ]
+#       resources:
+#         requests:
+#           storage: 1Gi
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: products-service
+# spec:
+#   selector:
+#     app: products
+#   ports:
+#     - name: products
+#       protocol: TCP
+#       port: 3000
+#       targetPort: 3000
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: products-deployment
 spec:
   replicas: 1
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
   selector:
     matchLabels:
       app: products
@@ -45,4 +101,3 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
-      

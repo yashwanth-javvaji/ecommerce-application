@@ -1,9 +1,0 @@
-[master]
-34.228.196.114
-
-[worker]
-34.202.161.71
-100.26.44.64
-
-[all:vars]
-ansible_user=ubuntu

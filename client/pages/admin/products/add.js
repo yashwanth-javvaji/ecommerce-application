@@ -111,8 +111,8 @@ const AddProduct = () => {
         validate(event.target);
     };
 
-    const handleProductImageChange = (event) => {
-        if (!checkImage(event.target.files[0], 5, { width: 300, height: 300 }, "productImage", errors, setErrors)) {
+    const handleProductImageChange = async (event) => {
+        if (!(await checkImage(event.target.files[0], 5, { width: 300, height: 300 }, "productImage", errors, setErrors))) {
             delete errors.productImage;
             setErrors(errors);
             setProductImage(event.target.files[0]);

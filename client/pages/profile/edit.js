@@ -76,8 +76,8 @@ const EditProfile = ({ currentUser }) => {
         validate(event.target);
     };
 
-    const handleProfileImageChange = (event) => {
-        if (!checkImage(event.target.files[0], 5, { width: 500, height: 500 }, "profileImage", errors, setErrors)) {
+    const handleProfileImageChange = async (event) => {
+        if (!(await checkImage(event.target.files[0], 5, { width: 500, height: 500 }, "profileImage", errors, setErrors))) {
             delete errors.profileImage;
             setErrors(errors);
             setProfileImage(event.target.files[0]);

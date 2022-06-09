@@ -45,13 +45,3 @@ export const getReviewById = async (id) => {
         console.log(err);
     }
 };
-
-// // PATCH (User)
-// export const updateReview = () => {
-
-// };
-
-// // DELETE (User)
-// export const deleteReview = () => {
-
-// };
