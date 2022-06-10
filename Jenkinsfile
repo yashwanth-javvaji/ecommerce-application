@@ -2,60 +2,100 @@ pipeline {
     agent any
     stages {
         stage('SCM Checkout') {
-            steps{
-                git url:'https://github.com/javvajiyashwanth/major-project.git', branch:'master'
+            steps {
+                script {
+                    try {
+                        git url:'https://github.com/javvajiyashwanth/major-project.git', branch:'master'
+                    }  catch (err) {
+                        if (currentBuild.result == 'UNSTABLE')
+                            currentBuild.result = 'FAILURE'
+                        sh "exit 1"
+                    }
+                }
             }
         }        
         stage('Build Docker Images') {
             steps {
-                sh './docker.sh'
+                script {
+                    try {
+                        sh 'docker login -u yashwanthjavvaji -p Password@'
+                        sh 'cd auth'
+                        sh 'docker build --network host -t yashwanthjavvaji/auth .'
+                        sh 'docker push yashwanthjavvaji/auth'
+                        sh 'cd ..'
+                        sh 'cd products'
+                        sh 'docker build --network host -t yashwanthjavvaji/products .'
+                        sh 'docker push yashwanthjavvaji/products'
+                        sh 'cd ..'
+                        sh 'cd orders'
+                        sh 'docker build --network host -t yashwanthjavvaji/orders .'
+                        sh 'docker push yashwanthjavvaji/orders'
+                        sh 'cd ..'
+                        sh 'cd payments'
+                        sh 'docker build --network host -t yashwanthjavvaji/payments .'
+                        sh 'docker push yashwanthjavvaji/payments'
+                        sh 'cd ..'
+                        sh 'cd expiration'
+                        sh 'docker build --network host -t yashwanthjavvaji/expiration .'
+                        sh 'docker push yashwanthjavvaji/expiration'
+                        sh 'cd ..'
+                        sh 'cd client'
+                        sh 'docker build --network host -t yashwanthjavvaji/client .'
+                        sh 'docker push yashwanthjavvaji/client'
+                        sh 'cd ..'
+                    } catch (err) {
+                        if (currentBuild.result == 'UNSTABLE')
+                            currentBuild.result = 'FAILURE'
+                        sh "exit 1"
+                    }
+                }
             }   
         }
         stage('Automation Testing') {
-            parallel {
-                stage('Auth Service') {
-                    steps {
-                        script {
-                            try {
-                                sh '''
-                                    #!/bin/bash
-                                    cd auth
-                                    npm install
-                                    npm run test
-                                '''
-                            } catch (err) {
-                                if (currentBuild.result == 'UNSTABLE')
-                                    currentBuild.result = 'FAILURE'
-                                throw err
-                            }
-                        }
-                    }
-                }
-                stage('Products Service') {
-                    steps {
-                        script {
-                            try {
-                                sh '''
-                                    #!/bin/bash
-                                    cd products
-                                    npm install
-                                    npm run test
-                                '''
-                            } catch (err) {
-                                if (currentBuild.result == 'UNSTABLE')
-                                    currentBuild.result = 'FAILURE'
-                                throw err
-                            }
-                        }
+            steps {
+                script {
+                    try {
+                        sh 'cd auth'
+                        sh 'npm install'
+                        sh 'npm run test'
+                        sh 'cd ..'
+                        sh 'cd products'
+                        sh 'npm install'
+                        sh 'npm run test'
+                        sh 'cd ..'
+                        sh 'cd orders'
+                        sh 'npm install'
+                        sh 'npm run test'
+                        sh 'cd ..'
+                        sh 'cd payments'
+                        sh 'npm install'
+                        sh 'npm run test'
+                        sh 'cd ..'
+                        sh 'cd expiration'
+                        sh 'npm install'
+                        sh 'npm run test'
+                        sh 'cd ..'
+                    } catch (err) {
+                        if (currentBuild.result == 'UNSTABLE')
+                            currentBuild.result = 'FAILURE'
+                        sh "exit 1"
                     }
                 }
             }
         }
         stage('Deployment') {
             steps {
-                sh './kubernetes.sh'                
-            }   
+                script {
+                    try {
+                        sh 'cd infra'
+                        sh 'kubectl apply -f k8s'                
+                    }  catch (err) {
+                        if (currentBuild.result == 'UNSTABLE')
+                            currentBuild.result = 'FAILURE'
+                        sh "exit 1"
+                    }
+                }
+            } 
         }
-
     }
 }
