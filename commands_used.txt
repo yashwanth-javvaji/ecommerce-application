@@ -91,7 +91,7 @@ eksctl create cluster  --zones us-east-1a,us-east-1b,us-east-1c \
 eksctl create cluster 'sample-cluster' --zones us-east-1a,us-east-1b,us-east-1c
 
 eksctl delete cluster --name web-cluster
-
+eksctl delete cluster --name web-clusterpub
 
 
 WORKER NODE 

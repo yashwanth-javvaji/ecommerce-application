@@ -1,8 +1,7 @@
 sudo yum update -y
 sudo yum install git -y
 
-if [ -d "~/major-project" ] 
-then
+if [ -d "major-project" ] ;then
     cd major-project 
     git pull
 else
