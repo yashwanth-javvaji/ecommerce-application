@@ -43,9 +43,9 @@ To run this project locally, you'll need to follow these steps:
 - Install the technologies mentioned above on your machine
 - Install dependencies by running npm install in both the root directory and the client directory
 - Create a .env file in the root directory and add the following environment variables:
-<code>MONGO_URI=<your MongoDB connection string>
+   ```MONGO_URI=<your MongoDB connection string>
   JWT_SECRET=<your secret key for JSON Web Tokens>
-  STRIPE_SECRET_KEY=<your secret key for Stripe API></code>
+  STRIPE_SECRET_KEY=<your secret key for Stripe API>```
 - Seed the database by running npm run seed in the root directory
 - Start the server by running npm start in the root directory
 - Start the client by running npm start in the client directory
